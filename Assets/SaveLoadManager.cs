@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
 using System.IO;
+using UnityEditor;
 
-public class SaveLoadManager
+public class SaveLoadManager: MonoBehaviour
 {
     private string _savePath;
 
@@ -72,7 +73,7 @@ public class SaveLoadManager
     
     public GameObject ConstructGameObjectFromItemData(ItemData itemData)
     {
-        GameObject itemObject = new GameObject(itemData.itemName);
+        GameObject itemObject  = Instantiate(Resources.Load<GameObject>("Item"));
         if (itemData is AmmoData ammoData)
         {
             Ammo ammo = itemObject.AddComponent<Ammo>();
@@ -150,18 +151,38 @@ public class SaveLoadManager
             type = item.type,
             price = item.price,
             size = item.size,
-            spriteName = item.sprite != null ? item.sprite.name : null,
+            spriteName = item.sprite != null ? GetSpriteResourcePath(item) : null,
             id = item.id
         };
     }
-    
+
+    private string GetSpriteResourcePath(Item item)
+    {
+        if (item.sprite == null)
+        {
+            Debug.LogWarning("Sprite is null for item: " + item.itemName);
+            return null;
+        }
+        if (item is Backpack backpack) return "Equipment/Backpack/" + item.sprite.name + "/" + item.sprite.name;
+        if (item is BodyArmor armor) return "Equipment/Armor/" + item.sprite.name + "/" + item.sprite.name;
+        if (item is Helmet helmet) return "Equipment/Helmet/" + item.sprite.name + "/" + item.sprite.name;
+        if (item is MedicalKit medicalKit) return "Equipment/MedicalKit/" + item.sprite.name + "/" + item.sprite.name;
+        if (item is Weapon weapon) return "Equipment/Weapon/" + item.sprite.name + "/" + item.sprite.name;
+        if (item is Collection collection) return "Equipment/Collection/" + item.sprite.name + "/" + item.sprite.name;
+        if (item is Drink drink) return "Equipment/Drink/" + item.sprite.name + "/" + item.sprite.name;
+        if (item is Food food) return "Equipment/Food/" + item.sprite.name + "/" + item.sprite.name;
+        if (item is ChestRig chestRig) return "Equipment/ChestRig/" + item.sprite.name + "/" + item.sprite.name;
+        return null;
+    }
+
     public void FromItemData(Item item, ItemData itemData)
     {
         item.itemName = itemData.itemName;
         item.type = itemData.type;
         item.price = itemData.price;
         item.size = itemData.size;
-        item.sprite = Resources.Load<Sprite>(itemData.spriteName); // 假设 sprite 存储在 Resources 文件夹中
+        Debug.Log("spriteName: " + itemData.spriteName);
+        item.sprite = Resources.Load<Sprite>(itemData.spriteName);
         item.id = itemData.id;
     }
 
@@ -173,7 +194,7 @@ public class SaveLoadManager
             type = ammo.type,
             price = ammo.price,
             size = ammo.size,
-            spriteName = ammo.sprite != null ? ammo.sprite.name : null,
+            spriteName = ammo.sprite != null ? GetSpriteResourcePath(ammo) : null,
             id = ammo.id,
             maxStackSize = ammo.maxStackSize,
             currentStackSize = ammo.currentStackSize
@@ -195,7 +216,7 @@ public class SaveLoadManager
             type = backpack.type,
             price = backpack.price,
             size = backpack.size,
-            spriteName = backpack.sprite != null ? backpack.sprite.name : null,
+            spriteName = backpack.sprite != null ? GetSpriteResourcePath(backpack) : null,
             id = backpack.id,
             innerSize = backpack.innerSize
         };
@@ -215,7 +236,7 @@ public class SaveLoadManager
             type = armor.type,
             price = armor.price,
             size = armor.size,
-            spriteName = armor.sprite != null ? armor.sprite.name : null,
+            spriteName = armor.sprite != null ? GetSpriteResourcePath(armor) : null,
             id = armor.id,
             durability = armor.durability,
             Maxdurability = armor.Maxdurability
@@ -237,7 +258,7 @@ public class SaveLoadManager
             type = helmet.type,
             price = helmet.price,
             size = helmet.size,
-            spriteName = helmet.sprite != null ? helmet.sprite.name : null,
+            spriteName = helmet.sprite != null ? GetSpriteResourcePath(helmet) : null,
             id = helmet.id,
             durability = helmet.durability,
             Maxdurability = helmet.Maxdurability
@@ -259,7 +280,7 @@ public class SaveLoadManager
             type = medicalKit.type,
             price = medicalKit.price,
             size = medicalKit.size,
-            spriteName = medicalKit.sprite != null ? medicalKit.sprite.name : null,
+            spriteName = medicalKit.sprite != null ? GetSpriteResourcePath(medicalKit) : null,
             id = medicalKit.id,
             hp = medicalKit.hp
         };
@@ -279,7 +300,7 @@ public class SaveLoadManager
             type = weapon.type,
             price = weapon.price,
             size = weapon.size,
-            spriteName = weapon.sprite != null ? weapon.sprite.name : null,
+            spriteName = weapon.sprite != null ? GetSpriteResourcePath(weapon) : null,
             id = weapon.id,
             bodyDmg = weapon.bodyDmg,
             ArmorDmg = weapon.ArmorDmg,
@@ -317,7 +338,7 @@ public class SaveLoadManager
             type = collection.type,
             price = collection.price,
             size = collection.size,
-            spriteName = collection.sprite != null ? collection.sprite.name : null,
+            spriteName = collection.sprite != null ? GetSpriteResourcePath(collection) : null,
             id = collection.id
         };
     }
@@ -336,7 +357,7 @@ public class SaveLoadManager
             type = consumable.type,
             price = consumable.price,
             size = consumable.size,
-            spriteName = consumable.sprite != null ? consumable.sprite.name : null,
+            spriteName = consumable.sprite != null ? GetSpriteResourcePath(consumable) : null,
             id = consumable.id,
             useTime = consumable.useTime
         };
@@ -356,7 +377,7 @@ public class SaveLoadManager
             type = drink.type,
             price = drink.price,
             size = drink.size,
-            spriteName = drink.sprite != null ? drink.sprite.name : null,
+            spriteName = drink.sprite != null ? GetSpriteResourcePath(drink) : null,
             id = drink.id,
             water = drink.water
         };
@@ -376,7 +397,7 @@ public class SaveLoadManager
             type = food.type,
             price = food.price,
             size = food.size,
-            spriteName = food.sprite != null ? food.sprite.name : null,
+            spriteName = food.sprite != null ? GetSpriteResourcePath(food) : null,
             id = food.id,
             repletion = food.repletion
         };
@@ -396,7 +417,7 @@ public class SaveLoadManager
             type = chestRig.type,
             price = chestRig.price,
             size = chestRig.size,
-            spriteName = chestRig.sprite != null ? chestRig.sprite.name : null,
+            spriteName = chestRig.sprite != null ? GetSpriteResourcePath(chestRig) : null,
             id = chestRig.id,
             innerSize = chestRig.innerSize
         };

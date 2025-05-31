@@ -18,6 +18,11 @@ public class MedicalKit : Consumable
         
     }
     
+    private void Awake()
+    {
+        UseStrategy = new MedicalKitUseStrategy();
+    }
+    
     public override string GetSpecificDescription()
     {
         return base.GetSpecificDescription() + "\n" +

@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract class Consumable : Item
 {
     public int useTime;
+    protected IUseStrategy UseStrategy;
 
     // use strategy mode to define how the item is used
 
@@ -19,6 +20,14 @@ public abstract class Consumable : Item
     void Update()
     {
         
+    }
+    
+    public void Use(Player player)
+    {
+        bool used = UseStrategy != null && UseStrategy.Use(player, this);
+        if (used)
+        {
+        }
     }
     
     public override string GetSpecificDescription()

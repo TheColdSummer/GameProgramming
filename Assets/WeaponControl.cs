@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class WeaponControl : MonoBehaviour
@@ -10,18 +12,14 @@ public class WeaponControl : MonoBehaviour
     public Transform firePoint;
     public Transform directionPoint;
     public SpriteRenderer spriteRenderer;
+    public Image weaponImage;
+    public TextMeshProUGUI weaponCurAmmo;
+    public TextMeshProUGUI weaponMaxAmmo;
     private Weapon _curWeapon;
     private float _lastFireTime;
 
     void Start()
     {
-        Weapon testWeapon = Resources.Load<Weapon>("Weapon/AKM");
-        if (testWeapon == null)
-        {
-            Debug.LogError("Weapon not found in Resources folder.");
-            return;
-        }
-        ChangeWeapon(testWeapon);
     }
 
     // Update is called once per frame
@@ -74,6 +72,12 @@ public class WeaponControl : MonoBehaviour
     
     void Fire()
     {
+        // check if the weapon has ammo in the magazine
+        if (_curWeapon.currentAmmo <= 0)
+        {
+            // need reload
+            return;
+        }
         Vector2 direction = (directionPoint.position - firePoint.position).normalized;
         float maxAngle = Mathf.Lerp(5f, 0f, Mathf.Clamp01(_curWeapon.control / 100f));
         float randomAngle = Random.Range(-maxAngle, maxAngle);
@@ -81,6 +85,7 @@ public class WeaponControl : MonoBehaviour
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
         Bullet bulletScript = bullet.GetComponent<Bullet>();
         bulletScript.Init(direction, 100, _curWeapon.ArmorDmg, _curWeapon.bodyDmg);
+        WeaponFired();
     }
 
     public void ChangeWeapon(Weapon weapon)
@@ -96,6 +101,7 @@ public class WeaponControl : MonoBehaviour
             if (spriteRenderer != null)
             {
                 spriteRenderer.GetComponent<SpriteRenderer>().sprite = weapon.sprite;
+                UpdateWeaponDisplay(weapon);
             }
             else
             {
@@ -103,5 +109,45 @@ public class WeaponControl : MonoBehaviour
             }
             Debug.Log("Weapon changed to: " + _curWeapon);
         }
+    }
+
+    public void UpdateWeaponDisplay(Weapon weapon)
+    {
+        weaponImage.sprite = weapon.sprite;
+        weaponCurAmmo.text = weapon.currentAmmo.ToString();
+        weaponMaxAmmo.text = weapon.capacity.ToString();
+    }
+
+    public void WeaponFired()
+    {
+        if (_curWeapon == null)
+        {
+            Debug.LogError("Current weapon is null. Cannot update ammo.");
+            return;
+        }
+        
+        // Decrease current ammo by 1
+        _curWeapon.currentAmmo--;
+        
+        // Update the UI
+        weaponCurAmmo.text = _curWeapon.currentAmmo.ToString();
+    }
+
+    public void ReLoad(int ammo)
+    {
+        if (_curWeapon == null)
+        {
+            Debug.LogError("Current weapon is null. Cannot reload.");
+            return;
+        }
+        
+        if (ammo + _curWeapon.currentAmmo > _curWeapon.capacity)
+        {
+            ammo = _curWeapon.capacity - _curWeapon.currentAmmo;
+        }
+        
+        _curWeapon.currentAmmo += ammo;
+        
+        weaponCurAmmo.text = _curWeapon.currentAmmo.ToString();
     }
 }

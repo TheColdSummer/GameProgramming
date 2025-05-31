@@ -64,10 +64,12 @@ public class Container : MonoBehaviour
                 Debug.LogError("Item is null. Cannot add to container.");
                 continue;
             }
-            SaveLoadManager manager = new SaveLoadManager();
+
+            SaveLoadManager manager = gameObject.AddComponent<SaveLoadManager>();
             GameObject itemObject = manager.ConstructGameObjectFromItemData(manager.ToItemData(item));
             itemObject.transform.SetParent(Content.transform, false);
             itemObject.SetActive(true);
+            Destroy(manager);
         }
         
     }

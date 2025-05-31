@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
     public Helmet helmet;
     public BodyArmor bodyArmor;
     public EnemyWeaponControl weaponControl;
+    public GameObject Containers;
     
     // Start is called before the first frame update
     void Start()
@@ -99,7 +100,6 @@ public class Enemy : MonoBehaviour
             w.mode = wm.mode;
             w.ammoType = wm.ammoType;
             w.currentAmmo = wm.currentAmmo;
-            Destroy(wm);
         }
         else
         {
@@ -120,7 +120,6 @@ public class Enemy : MonoBehaviour
             b.id = bm.id;
             b.durability = bm.durability;
             b.Maxdurability = bm.Maxdurability;
-            Destroy(bm);
         }
         else
         {
@@ -141,7 +140,6 @@ public class Enemy : MonoBehaviour
             h.id = hm.id;
             h.durability = hm.durability;
             h.Maxdurability = hm.Maxdurability;
-            Destroy(hm);
         }
         else
         {
@@ -161,7 +159,6 @@ public class Enemy : MonoBehaviour
             c.sprite = cm.sprite;
             c.id = cm.id;
             c.innerSize = cm.innerSize;
-            Destroy(cm);
         }
         else
         {
@@ -182,7 +179,6 @@ public class Enemy : MonoBehaviour
             b.sprite = bm.sprite;
             b.id = bm.id;
             b.innerSize = bm.innerSize;
-            Destroy(bm);
         }
         else
         {
@@ -264,18 +260,44 @@ public class Enemy : MonoBehaviour
 
     public void Die()
     {
-        // remove some components
-        weaponControl.enabled = false;
+        Destroy(weaponControl);
         Destroy(gameObject.GetComponent<HitDetector>());
+        Destroy(gameObject.GetComponent<Rigidbody2D>());
+        Destroy(gameObject.GetComponent<BoxCollider2D>());
         
-        
-        
-        // rotate 90°
         transform.Rotate(0, 0, 90);
         
-        
-        // change the body to container
-        
+        GameObject container = Instantiate(Resources.Load<GameObject>("Container"), Containers.transform);
+        container.transform.position = transform.position;
+        Container containerScript = container.GetComponent<Container>();
+        if (containerScript == null)
+        {
+            Debug.LogError("Container script not found on the instantiated container.");
+            return;
+        }
+        List<Item> items = new List<Item>();
+        if (backpack != null)
+        {
+            items.Add(backpack);
+        }
+        if (chestRig != null)
+        {
+            items.Add(chestRig);
+        }
+        if (helmet != null)
+        {
+            items.Add(helmet);
+        }
+        if (bodyArmor != null)
+        {
+            items.Add(bodyArmor);
+        }
+        if (weapon != null)
+        {
+            weapon.currentAmmo = Random.Range(0, weapon.capacity);
+            items.Add(weapon);
+        }
+        containerScript.AddItems(items);
         
     }
 }

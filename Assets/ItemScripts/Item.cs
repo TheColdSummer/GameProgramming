@@ -13,6 +13,11 @@ public abstract class Item : MonoBehaviour
 
     public void Start()
     {
+        RefreshItemUI();
+    }
+
+    public void RefreshItemUI()
+    {
         Transform imageTransform = transform.Find("Image");
         if (imageTransform != null)
         {
@@ -20,7 +25,6 @@ public abstract class Item : MonoBehaviour
             if (image != null)
             {
                 image.sprite = sprite;
-                Debug.Log($"Sprite set for item: {itemName}");
             }
             else
             {
@@ -32,7 +36,6 @@ public abstract class Item : MonoBehaviour
             Debug.LogError("Image GameObject not found as a child of Item.");
         }
 
-        // 给子对象Text中的子对象Name，Size，Price设置文本
         Transform textTransform = transform.Find("Text");
         if (textTransform != null)
         {
@@ -69,7 +72,7 @@ public abstract class Item : MonoBehaviour
             Debug.LogError("Text GameObject not found as a child of Item.");
         }
     }
-    
+
     public virtual string GetSpecificDescription()
     {
         return $"Item Name: {itemName}\nType: {type}\nPrice: {price}\nSize: {size}";

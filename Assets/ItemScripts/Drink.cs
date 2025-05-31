@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,7 +18,12 @@ public class Drink : Consumable
     {
         
     }
-    
+
+    private void Awake()
+    {
+        UseStrategy = new DrinkUseStrategy();
+    }
+
     public override string GetSpecificDescription()
     {
         return base.GetSpecificDescription() + "\n" +

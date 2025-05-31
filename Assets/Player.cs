@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     public int currentRepletion;
     public int maxHydration;
     public int currentHydration;
+    public GameObject inventoryContent;
     public GameObject backpack;
     public GameObject weapon;
     public GameObject chestRig;
@@ -21,6 +22,8 @@ public class Player : MonoBehaviour
     public Bar armorBar;
     public Bar helmetBar;
     public WeaponControl weaponControl;
+    public GameObject reloadUI;
+    private bool _isReloading = false;
 
     // Start is called before the first frame update
     void Start()
@@ -32,9 +35,85 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.R) && !_isReloading)
+        {
+            _isReloading = true;
+            Reload();
+            _isReloading = false;
+        }
     }
-    
+
+    private void Reload()
+    {
+        if (weapon == null)
+        {
+            Debug.LogWarning("No weapon to reload.");
+            return;
+        }
+        EquipmentInInventory equipmentInInventory = weapon.GetComponent<EquipmentInInventory>();
+        if (equipmentInInventory == null || equipmentInInventory.equipment == null)
+        {
+            Debug.LogWarning("No valid weapon found in the inventory.");
+            return;
+        }
+        
+        Weapon w = equipmentInInventory.equipment.GetComponent<Weapon>();
+        int requiredAmmo = w.capacity - w.currentAmmo;
+        int getAmmo = requiredAmmo;
+        if (requiredAmmo <= 0)
+        {
+            return;
+        }
+
+        string ammoType = w.GetComponent<Weapon>().ammoType;
+        List<Ammo> ammoPacks = new List<Ammo>();
+        foreach (Transform item in inventoryContent.transform)
+        {
+            Item inventoryItem = item.GetComponent<Item>();
+            if (inventoryItem is Ammo ammo && ammo.itemName == ammoType)
+            {
+                ammoPacks.Add(ammo);
+            }
+        }
+
+        ammoPacks.Sort((a, b) => a.currentStackSize.CompareTo(b.currentStackSize));
+        foreach (Ammo ammoPack in ammoPacks)
+        {
+            if (ammoPack.currentStackSize <= 0)
+            {
+                continue;
+            }
+
+            int getAmount = ammoPack.GetReloadAmount(requiredAmmo);
+            requiredAmmo -= getAmount;
+            if (requiredAmmo <= 0)
+            {
+                break;
+            }
+        }
+        getAmmo -= requiredAmmo;
+        if (getAmmo <= 0)
+        {
+            Debug.LogWarning("No ammo available for reloading.");
+            return;
+        }
+        StartCoroutine(Reload(w, getAmmo));
+    }
+
+    private IEnumerator Reload(Weapon w, int getAmmo)
+    {
+        if (reloadUI != null)
+        {
+            reloadUI.SetActive(true);
+        }
+        yield return new WaitForSeconds(w.reloadTime);
+        weaponControl.ReLoad(getAmmo);
+        if (reloadUI != null)
+        {
+            reloadUI.SetActive(false);
+        }
+    }
+
     public void ChangeHealthDelta(int delta)
     {
         currentHp += delta;
@@ -46,12 +125,13 @@ public class Player : MonoBehaviour
         {
             currentHp = 0;
         }
+
         if (hpBar != null)
         {
             hpBar.SetValue(currentHp, maxHp);
         }
     }
-    
+
     public void ChangeRepletionDelta(int delta)
     {
         currentRepletion += delta;
@@ -63,12 +143,13 @@ public class Player : MonoBehaviour
         {
             currentRepletion = 0;
         }
+
         if (repletionBar != null)
         {
             repletionBar.SetValue(currentRepletion, maxRepletion);
         }
     }
-    
+
     public void ChangeHydrationDelta(int delta)
     {
         currentHydration += delta;
@@ -80,6 +161,7 @@ public class Player : MonoBehaviour
         {
             currentHydration = 0;
         }
+
         if (hydrationBar != null)
         {
             hydrationBar.SetValue(currentHydration, maxHydration);
@@ -97,9 +179,10 @@ public class Player : MonoBehaviour
                 return bodyArmorItem.durability;
             }
         }
+
         return 0;
     }
-    
+
     public int GetMaxBodyArmorDurability()
     {
         EquipmentInInventory armor = bodyArmor.GetComponent<EquipmentInInventory>();
@@ -111,6 +194,7 @@ public class Player : MonoBehaviour
                 return bodyArmorItem.Maxdurability;
             }
         }
+
         return 0;
     }
 
@@ -125,6 +209,7 @@ public class Player : MonoBehaviour
                 return helmetItem.durability;
             }
         }
+
         return 0;
     }
 
@@ -139,6 +224,7 @@ public class Player : MonoBehaviour
                 return helmetItem.Maxdurability;
             }
         }
+
         return 0;
     }
 
@@ -204,7 +290,6 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("Provided item is not a Helmet.");
         }
-        
     }
 
     public void ChangeBodyArmor(Item equipment)
