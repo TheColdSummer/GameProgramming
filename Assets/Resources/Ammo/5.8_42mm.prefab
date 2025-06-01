@@ -248,7 +248,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -369,7 +369,7 @@ MonoBehaviour:
   price: 1680
   size: 1
   sprite: {fileID: 21300000, guid: ac09c0eeafde2e6409ea074be304a36c, type: 3}
-  id: 24
+  id: 34
   maxStackSize: 60
   currentStackSize: 60
 --- !u!1 &7603095424857003409

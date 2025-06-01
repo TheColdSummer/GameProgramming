@@ -30,5 +30,6 @@ public class MedicalKitUseStrategy : IUseStrategy
     {
         yield return new WaitForSeconds(medicalKit.useTime);
         player.ChangeHealthDelta(medicalKit.hp);
+        GameObject.Destroy(medicalKit.gameObject);
     }
 }

@@ -163,15 +163,16 @@ public class SaveLoadManager: MonoBehaviour
             Debug.LogWarning("Sprite is null for item: " + item.itemName);
             return null;
         }
-        if (item is Backpack backpack) return "Equipment/Backpack/" + item.sprite.name + "/" + item.sprite.name;
-        if (item is BodyArmor armor) return "Equipment/Armor/" + item.sprite.name + "/" + item.sprite.name;
-        if (item is Helmet helmet) return "Equipment/Helmet/" + item.sprite.name + "/" + item.sprite.name;
-        if (item is MedicalKit medicalKit) return "Equipment/MedicalKit/" + item.sprite.name + "/" + item.sprite.name;
-        if (item is Weapon weapon) return "Equipment/Weapon/" + item.sprite.name + "/" + item.sprite.name;
-        if (item is Collection collection) return "Equipment/Collection/" + item.sprite.name + "/" + item.sprite.name;
-        if (item is Drink drink) return "Equipment/Drink/" + item.sprite.name + "/" + item.sprite.name;
-        if (item is Food food) return "Equipment/Food/" + item.sprite.name + "/" + item.sprite.name;
-        if (item is ChestRig chestRig) return "Equipment/ChestRig/" + item.sprite.name + "/" + item.sprite.name;
+        if (item is Backpack backpack) return "ItemTexture/Backpack/" + item.sprite.name + "/" + item.sprite.name;
+        if (item is BodyArmor armor) return "ItemTexture/Armor/" + item.sprite.name + "/" + item.sprite.name;
+        if (item is Helmet helmet) return "ItemTexture/Helmet/" + item.sprite.name + "/" + item.sprite.name;
+        if (item is MedicalKit medicalKit) return "ItemTexture/MedicalKit/" + item.sprite.name + "/" + item.sprite.name;
+        if (item is Weapon weapon) return "ItemTexture/Weapon/" + item.sprite.name + "/" + item.sprite.name;
+        if (item is Collection collection) return "ItemTexture/Collection/" + item.sprite.name + "/" + item.sprite.name;
+        if (item is Drink drink) return "ItemTexture/Drink/" + item.sprite.name + "/" + item.sprite.name;
+        if (item is Food food) return "ItemTexture/Food/" + item.sprite.name + "/" + item.sprite.name;
+        if (item is ChestRig chestRig) return "ItemTexture/ChestRig/" + item.sprite.name + "/" + item.sprite.name;
+        if (item is Ammo ammo) return "ItemTexture/Ammo/" + item.sprite.name;
         return null;
     }
 
@@ -239,7 +240,7 @@ public class SaveLoadManager: MonoBehaviour
             spriteName = armor.sprite != null ? GetSpriteResourcePath(armor) : null,
             id = armor.id,
             durability = armor.durability,
-            Maxdurability = armor.Maxdurability
+            maxDurability = armor.maxDurability
         };
     }
     
@@ -247,7 +248,7 @@ public class SaveLoadManager: MonoBehaviour
     {
         FromItemData(armor, armorData);
         armor.durability = armorData.durability;
-        armor.Maxdurability = armorData.Maxdurability;
+        armor.maxDurability = armorData.maxDurability;
     }
     
     public HelmetData ToHelmetData(Helmet helmet)
@@ -261,7 +262,7 @@ public class SaveLoadManager: MonoBehaviour
             spriteName = helmet.sprite != null ? GetSpriteResourcePath(helmet) : null,
             id = helmet.id,
             durability = helmet.durability,
-            Maxdurability = helmet.Maxdurability
+            maxDurability = helmet.maxDurability
         };
     }
     
@@ -269,7 +270,7 @@ public class SaveLoadManager: MonoBehaviour
     {
         FromItemData(helmet, helmetData);
         helmet.durability = helmetData.durability;
-        helmet.Maxdurability = helmetData.Maxdurability;
+        helmet.maxDurability = helmetData.maxDurability;
     }
     
     public MedicalKitData ToMedicalKitData(MedicalKit medicalKit)
@@ -471,7 +472,7 @@ public class BackpackData : ItemData
 public class BodyArmorData : ItemData
 {
     public int durability;
-    public int Maxdurability;
+    public int maxDurability;
 }
 
 [System.Serializable]
@@ -507,7 +508,7 @@ public class FoodData : ConsumableData
 public class HelmetData : ItemData
 {
     public int durability;
-    public int Maxdurability;
+    public int maxDurability;
 }
 
 [System.Serializable]

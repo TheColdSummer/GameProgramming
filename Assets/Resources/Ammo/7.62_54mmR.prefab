@@ -170,7 +170,7 @@ MonoBehaviour:
   price: 2100
   size: 1
   sprite: {fileID: 21300000, guid: ac09c0eeafde2e6409ea074be304a36c, type: 3}
-  id: 23
+  id: 33
   maxStackSize: 60
   currentStackSize: 60
 --- !u!1 &4207069194849430447

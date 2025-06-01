@@ -24,12 +24,14 @@ public class Player : MonoBehaviour
     public WeaponControl weaponControl;
     public GameObject reloadUI;
     private bool _isReloading = false;
+    private Coroutine _hpLossCoroutine;
 
     // Start is called before the first frame update
     void Start()
     {
         armorBar.SetValue(GetCurBodyArmorDurability(), GetMaxBodyArmorDurability());
         helmetBar.SetValue(GetCurHelmetDurability(), GetMaxHelmetDurability());
+        StartCoroutine(DecreaseRepletionAndHydration());
     }
 
     // Update is called once per frame
@@ -38,8 +40,8 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R) && !_isReloading)
         {
             _isReloading = true;
+            weaponControl.SetReloading(true);
             Reload();
-            _isReloading = false;
         }
     }
 
@@ -48,12 +50,16 @@ public class Player : MonoBehaviour
         if (weapon == null)
         {
             Debug.LogWarning("No weapon to reload.");
+            _isReloading = false;
+            weaponControl.SetReloading(false);
             return;
         }
         EquipmentInInventory equipmentInInventory = weapon.GetComponent<EquipmentInInventory>();
         if (equipmentInInventory == null || equipmentInInventory.equipment == null)
         {
             Debug.LogWarning("No valid weapon found in the inventory.");
+            _isReloading = false;
+            weaponControl.SetReloading(false);
             return;
         }
         
@@ -62,6 +68,8 @@ public class Player : MonoBehaviour
         int getAmmo = requiredAmmo;
         if (requiredAmmo <= 0)
         {
+            _isReloading = false;
+            weaponControl.SetReloading(false);
             return;
         }
 
@@ -95,6 +103,8 @@ public class Player : MonoBehaviour
         if (getAmmo <= 0)
         {
             Debug.LogWarning("No ammo available for reloading.");
+            _isReloading = false;
+            weaponControl.SetReloading(false);
             return;
         }
         StartCoroutine(Reload(w, getAmmo));
@@ -112,6 +122,8 @@ public class Player : MonoBehaviour
         {
             reloadUI.SetActive(false);
         }
+        _isReloading = false;
+        weaponControl.SetReloading(false);
     }
 
     public void ChangeHealthDelta(int delta)
@@ -148,6 +160,7 @@ public class Player : MonoBehaviour
         {
             repletionBar.SetValue(currentRepletion, maxRepletion);
         }
+        CheckRepletionHydrationAndAffectHealth();
     }
 
     public void ChangeHydrationDelta(int delta)
@@ -166,6 +179,7 @@ public class Player : MonoBehaviour
         {
             hydrationBar.SetValue(currentHydration, maxHydration);
         }
+        CheckRepletionHydrationAndAffectHealth();
     }
 
     public int GetCurBodyArmorDurability()
@@ -191,7 +205,7 @@ public class Player : MonoBehaviour
             BodyArmor bodyArmorItem = armor.equipment.GetComponent<BodyArmor>();
             if (bodyArmorItem != null)
             {
-                return bodyArmorItem.Maxdurability;
+                return bodyArmorItem.maxDurability;
             }
         }
 
@@ -221,7 +235,7 @@ public class Player : MonoBehaviour
             Helmet helmetItem = helmetEquip.equipment.GetComponent<Helmet>();
             if (helmetItem != null)
             {
-                return helmetItem.Maxdurability;
+                return helmetItem.maxDurability;
             }
         }
 
@@ -284,7 +298,7 @@ public class Player : MonoBehaviour
     {
         if (equipment is Helmet helmetItem)
         {
-            helmetBar.SetValue(helmetItem.durability, helmetItem.Maxdurability);
+            helmetBar.SetValue(helmetItem.durability, helmetItem.maxDurability);
         }
         else
         {
@@ -296,7 +310,7 @@ public class Player : MonoBehaviour
     {
         if (equipment is BodyArmor bodyArmorItem)
         {
-            armorBar.SetValue(bodyArmorItem.durability, bodyArmorItem.Maxdurability);
+            armorBar.SetValue(bodyArmorItem.durability, bodyArmorItem.maxDurability);
         }
         else
         {
@@ -313,6 +327,43 @@ public class Player : MonoBehaviour
         else
         {
             Debug.LogError("Provided item is not a Weapon.");
+        }
+    }
+    
+    private IEnumerator DecreaseRepletionAndHydration()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(5f);
+            ChangeRepletionDelta(-1);
+            ChangeHydrationDelta(-1);
+        }
+    }
+    
+    private IEnumerator LoseHpWhenZero()
+    {
+        while (currentRepletion == 0 || currentHydration == 0)
+        {
+            int m = (currentRepletion == 0 ? 1 : 0) + (currentHydration == 0 ? 1 : 0);
+            yield return new WaitForSeconds(5f);
+            ChangeHealthDelta(-m);
+        }
+    }
+    
+    private void CheckRepletionHydrationAndAffectHealth()
+    {
+        if (currentRepletion == 0 || currentHydration == 0)
+        {
+            if (_hpLossCoroutine == null)
+                _hpLossCoroutine = StartCoroutine(LoseHpWhenZero());
+        }
+        else
+        {
+            if (_hpLossCoroutine != null)
+            {
+                StopCoroutine(_hpLossCoroutine);
+                _hpLossCoroutine = null;
+            }
         }
     }
 }

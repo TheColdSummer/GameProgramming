@@ -5,7 +5,7 @@ using UnityEngine;
 public class BodyArmor : Item
 {
     public int durability;
-    public int Maxdurability;
+    public int maxDurability;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,7 +22,7 @@ public class BodyArmor : Item
     public override string GetSpecificDescription()
     {
         return base.GetSpecificDescription() + "\n" +
-               "Durability: " + durability + "/" + Maxdurability;
+               "Durability: " + durability + "/" + maxDurability;
     }
 
     public void ChangeDurabilityDelta(int delta)
@@ -32,9 +32,9 @@ public class BodyArmor : Item
         {
             durability = 0;
         }
-        if (durability > Maxdurability)
+        if (durability > maxDurability)
         {
-            durability = Maxdurability;
+            durability = maxDurability;
         }
     }
 }

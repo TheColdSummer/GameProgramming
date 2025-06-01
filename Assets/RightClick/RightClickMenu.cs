@@ -26,7 +26,7 @@ public class RightClickMenu : MonoBehaviour
         {
             Debug.LogError("PlayerInventory script not found on the playerInventory GameObject.");
         }
-        
+        RightClickHandler.RightClickMenuPanel = gameObject;
         gameObject.SetActive(false);
         descriptionPanel.GetComponent<Button>().onClick.AddListener(() =>
         {
@@ -122,8 +122,10 @@ public class RightClickMenu : MonoBehaviour
                 case "Chest Rig":
                     AddMenuItem("Equip", () => playerInventoryScript.ChangeEquipment(item));
                     break;
-                case "Consumable":
-                    throw new NotImplementedException("Consumable items are not yet implemented.");
+                case "Food":
+                case "Drink":
+                case "MedicalKit":
+                    AddMenuItem("Use", () => playerInventoryScript.UseConsumable(item as Consumable));
                     break;
             }
         }
@@ -139,8 +141,10 @@ public class RightClickMenu : MonoBehaviour
                 case "Chest Rig":
                     AddMenuItem("Equip", () => playerInventoryScript.ChangeEquipmentFromContainer(item));
                     break;
-                case "Consumable":
-                    throw new NotImplementedException("Consumable items are not yet implemented.");
+                case "Food":
+                case "Drink":
+                case "MedicalKit":
+                    AddMenuItem("Use", () => playerInventoryScript.UseConsumable(item as Consumable));
                     break;
             }
         }

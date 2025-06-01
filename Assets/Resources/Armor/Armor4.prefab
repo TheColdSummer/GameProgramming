@@ -85,7 +85,7 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 6bdb2f6bc66795f46ac445cf669df16a, type: 3}
   id: 11
   durability: 210
-  Maxdurability: 210
+  maxDurability: 210
 --- !u!114 &6096214925249825494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -340,7 +340,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}

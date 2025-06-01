@@ -15,8 +15,10 @@ public class WeaponControl : MonoBehaviour
     public Image weaponImage;
     public TextMeshProUGUI weaponCurAmmo;
     public TextMeshProUGUI weaponMaxAmmo;
+    public GameObject playerInventoryUI;
     private Weapon _curWeapon;
     private float _lastFireTime;
+    private bool _reloading;
 
     void Start()
     {
@@ -49,7 +51,7 @@ public class WeaponControl : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 0, angle);
         }
         
-        if (_curWeapon != null)
+        if (!playerInventoryUI.activeSelf && _curWeapon != null && !_reloading)
         {
             if (_curWeapon.mode == 0)
             {
@@ -149,5 +151,10 @@ public class WeaponControl : MonoBehaviour
         _curWeapon.currentAmmo += ammo;
         
         weaponCurAmmo.text = _curWeapon.currentAmmo.ToString();
+    }
+
+    public void SetReloading(bool b)
+    {
+        _reloading = b;
     }
 }

@@ -8,6 +8,7 @@ public class Move : MonoBehaviour
     public float speed;
     public int endurance;
     public int maxEndurance;
+    public GameObject playerInventoryUI;
     private Rigidbody2D playerRigidbody2D;
     private Animator animator;
 
@@ -24,7 +25,10 @@ public class Move : MonoBehaviour
     void Update()
     {
         HandleEndurance();
-        PlayerMovement();
+        if (!playerInventoryUI.activeSelf)
+        {
+            PlayerMovement();
+        }
     }
 
     private void HandleEndurance()
@@ -69,8 +73,7 @@ public class Move : MonoBehaviour
         if (horizontalMovement != 0 || verticalMovement != 0)
         {
             Vector2 movement = new Vector2(horizontalMovement, verticalMovement).normalized;
-            playerRigidbody2D.MovePosition(playerRigidbody2D.position + movement * currentSpeed * Time.deltaTime);
-
+            playerRigidbody2D.velocity = movement * currentSpeed;
             if (movement.x <= 0)
             {
                 animator.SetBool("left_move", true);

@@ -119,7 +119,7 @@ public class Enemy : MonoBehaviour
             b.sprite = bm.sprite;
             b.id = bm.id;
             b.durability = bm.durability;
-            b.Maxdurability = bm.Maxdurability;
+            b.maxDurability = bm.maxDurability;
         }
         else
         {
@@ -139,7 +139,7 @@ public class Enemy : MonoBehaviour
             h.sprite = hm.sprite;
             h.id = hm.id;
             h.durability = hm.durability;
-            h.Maxdurability = hm.Maxdurability;
+            h.maxDurability = hm.maxDurability;
         }
         else
         {

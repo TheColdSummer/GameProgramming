@@ -6,43 +6,43 @@ public class Interactable : MonoBehaviour
 {
     public Container container;
     private bool isPlayerNearby = false;
-    private static GameObject inventoryUI;
-    private static GameObject containerContent;
-    private static GameObject playerInventory;
+    private static GameObject _containerUI;
+    private static GameObject _containerContent;
+    private static GameObject _playerInventoryUI;
 
     private void Start()
     {
-        if (inventoryUI == null)
+        if (_containerUI == null)
         {
-            inventoryUI = GameObject.Find("InventoryWithContainer");
-            if (inventoryUI == null)
+            _containerUI = GameObject.Find("InventoryWithContainer/Container");
+            if (_containerUI == null)
             {
                 Debug.LogError("InventoryWithContainer not found in the scene.");
             }
             
-            containerContent = GameObject.Find("InventoryWithContainer/Container/Inside/Content");
-            if (containerContent == null)
+            _containerContent = GameObject.Find("InventoryWithContainer/Container/Inside/Content");
+            if (_containerContent == null)
             {
                 Debug.LogError("Content not found in the specified path.");
             }
             
-            playerInventory = GameObject.Find("InventoryWithContainer/PlayerInventory");
-            if (playerInventory == null)
+            _playerInventoryUI = GameObject.Find("InventoryWithContainer/PlayerInventory");
+            if (_playerInventoryUI == null)
             {
                 Debug.LogError("PlayerInventory not found in the specified path.");
             }
-            inventoryUI.SetActive(false);
+            _containerUI.SetActive(false);
         }
     }
 
     void Update()
     {
-        if (isPlayerNearby && !inventoryUI.activeSelf && Input.GetKeyDown(KeyCode.F))
+        if (isPlayerNearby && !_containerUI.activeSelf && Input.GetKeyDown(KeyCode.F))
         {
             OpenUI();
         }
 
-        if (inventoryUI.activeSelf && Input.GetKeyDown(KeyCode.Escape))
+        if (_containerUI.activeSelf && (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Tab)))
         {
             CloseUI();
         }
@@ -69,24 +69,26 @@ public class Interactable : MonoBehaviour
     private void OpenUI()
     {
         DisplayItems();
-        playerInventory.GetComponent<PlayerInventory>().RefreshRemainingSpace();
-        inventoryUI.SetActive(true);
+        _playerInventoryUI.GetComponent<PlayerInventory>().RefreshRemainingSpace();
+        _containerUI.SetActive(true);
+        _playerInventoryUI.SetActive(true);
     }
 
     private void CloseUI()
     {
-        containerContent.GetComponent<ContainerContentUI>().ReturnItemsToContainer();
-        inventoryUI.SetActive(false);
+        _containerContent.GetComponent<ContainerContentUI>().ReturnItemsToContainer();
+        _containerUI.SetActive(false);
+        _playerInventoryUI.SetActive(false);
     }
 
     private void DisplayItems()
     {
-        foreach (Transform child in containerContent.transform)
+        foreach (Transform child in _containerContent.transform)
         {
             Destroy(child.gameObject);
         }
 
-        container.Open(containerContent);
+        container.Open(_containerContent);
     }
 
 }

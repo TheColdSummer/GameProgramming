@@ -29,5 +29,6 @@ public class DrinkUseStrategy : IUseStrategy
     {
         yield return new WaitForSeconds(drink.useTime);
         player.ChangeRepletionDelta(drink.water);
+        GameObject.Destroy(drink.gameObject);
     }
 }

@@ -360,7 +360,7 @@ public class PlayerInventory : MonoBehaviour
                         int newInnerSize = (equipment as ChestRig).innerSize;
                         if (chestRigScript.equipment != null)
                         {
-                            oldInnerSize = chestRigScript.equipment.size;
+                            oldInnerSize = (chestRigScript.equipment as ChestRig).innerSize;
                         }
                         if (remainingSize - oldInnerSize + newInnerSize < 0)
                         {
@@ -390,7 +390,7 @@ public class PlayerInventory : MonoBehaviour
                         int newInnerSize = (equipment as Backpack).innerSize;
                         if (backpackScript.equipment != null)
                         {
-                            oldInnerSize = backpackScript.equipment.size;
+                            oldInnerSize = (backpackScript.equipment as Backpack).innerSize;
                         }
                         if (remainingSize - oldInnerSize + newInnerSize < 0)
                         {
@@ -520,5 +520,15 @@ public class PlayerInventory : MonoBehaviour
         }
         AddItemToInventory(itemToUnequip);
         RefreshRemainingSpace();
+    }
+
+    public void UseConsumable(Consumable consumable)
+    {
+        if (consumable == null)
+        {
+            Debug.LogWarning("Cannot use null consumable.");
+            return;
+        }
+        consumable.Use(player);
     }
 }

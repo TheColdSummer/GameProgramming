@@ -14,7 +14,7 @@ public class Container : MonoBehaviour
 
     private void InitItems()
     {
-        //throw new NotImplementedException();
+        ItemFactory.GenerateItemsForContainer(this);
     }
 
     void Update()

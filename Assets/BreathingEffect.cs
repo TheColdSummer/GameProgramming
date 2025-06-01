@@ -11,6 +11,7 @@ public class BreathingEffect : MonoBehaviour
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        ResetTransparency();
     }
 
     void Update()

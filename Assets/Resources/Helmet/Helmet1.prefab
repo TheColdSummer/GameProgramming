@@ -219,7 +219,7 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 2345bd20ee74444418a4da50e7fa7b43, type: 3}
   id: 13
   durability: 50
-  Maxdurability: 50
+  maxDurability: 50
 --- !u!114 &3312759353748993222
 MonoBehaviour:
   m_ObjectHideFlags: 0

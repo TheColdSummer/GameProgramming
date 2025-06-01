@@ -29,5 +29,6 @@ public class FoodUseStrategy : IUseStrategy
     {
         yield return new WaitForSeconds(food.useTime);
         player.ChangeRepletionDelta(food.repletion);
+        GameObject.Destroy(food.gameObject);
     }
 }

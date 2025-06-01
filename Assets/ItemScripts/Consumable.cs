@@ -27,6 +27,11 @@ public abstract class Consumable : Item
         bool used = UseStrategy != null && UseStrategy.Use(player, this);
         if (used)
         {
+            Debug.Log("Item used: " + itemName);
+        }
+        else
+        {
+            Debug.Log("Failed to use item: " + itemName);
         }
     }
     
