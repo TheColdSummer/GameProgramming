@@ -366,4 +366,15 @@ public class Player : MonoBehaviour
             }
         }
     }
+
+    public bool IsWalking()
+    {
+        return gameObject.GetComponent<Rigidbody2D>().velocity != Vector2.zero;
+    }
+
+    public bool IsFiring()
+    {
+        float lastFireTime = weaponControl.GetLastFireTime();
+        return Time.time - lastFireTime < 0.3f;
+    }
 }

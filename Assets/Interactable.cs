@@ -32,6 +32,7 @@ public class Interactable : MonoBehaviour
                 Debug.LogError("PlayerInventory not found in the specified path.");
             }
             _containerUI.SetActive(false);
+            _playerInventoryUI.SetActive(false);
         }
     }
 
@@ -42,7 +43,7 @@ public class Interactable : MonoBehaviour
             OpenUI();
         }
 
-        if (_containerUI.activeSelf && (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Tab)))
+        if (_containerUI.activeSelf && Input.GetKeyDown(KeyCode.Escape))
         {
             CloseUI();
         }

@@ -12,7 +12,12 @@ public class Enemy : MonoBehaviour
     public Helmet helmet;
     public BodyArmor bodyArmor;
     public EnemyWeaponControl weaponControl;
-    public GameObject Containers;
+    public GameObject visualRange;
+    public GameObject footStepRange;
+    public GameObject gunFireRange;
+    public GameObject attackRange;
+    public GameObject containers;
+    private GameObject _idleRange;
     
     // Start is called before the first frame update
     void Start()
@@ -22,7 +27,6 @@ public class Enemy : MonoBehaviour
 
     private void InitEnemy()
     {
-        Random.InitState((int)System.DateTime.Now.Ticks);
         int p = Random.Range(0, 100);
         int level;
         if (p < 50)
@@ -77,6 +81,14 @@ public class Enemy : MonoBehaviour
                 break;
         }
         ChangeWeapon(weapon);
+        if (containers == null)
+        {
+            containers = GameObject.Find("Map/Containers");
+            if (containers == null)
+            {
+                Debug.LogError("Containers object not found in the scene.");
+            }
+        }
     }
     
     private void InitWeapon(Weapon w, string wName)
@@ -265,9 +277,12 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject.GetComponent<Rigidbody2D>());
         Destroy(gameObject.GetComponent<BoxCollider2D>());
         
+        FSM fsm = gameObject.GetComponent<FSM>();
+        fsm.TransitionToState(StateType.Die);
+        
         transform.Rotate(0, 0, 90);
         
-        GameObject container = Instantiate(Resources.Load<GameObject>("Container"), Containers.transform);
+        GameObject container = Instantiate(Resources.Load<GameObject>("Container"), containers.transform);
         container.transform.position = transform.position;
         Container containerScript = container.GetComponent<Container>();
         if (containerScript == null)
@@ -299,5 +314,26 @@ public class Enemy : MonoBehaviour
         }
         containerScript.AddItems(items);
         
+    }
+
+    public void SetIdleRange(GameObject idleRangeObject)
+    {
+        if (idleRangeObject == null)
+        {
+            Debug.LogError("Idle range object is null. Cannot set idle range.");
+            return;
+        }
+        _idleRange = idleRangeObject;
+        _idleRange.SetActive(true);
+    }
+
+    public GameObject GetIdleRange()
+    {
+        if (_idleRange == null)
+        {
+            Debug.LogError("Idle range is not set. Returning null.");
+            return null;
+        }
+        return _idleRange;
     }
 }

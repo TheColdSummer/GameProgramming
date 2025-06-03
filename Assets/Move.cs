@@ -29,6 +29,10 @@ public class Move : MonoBehaviour
         {
             PlayerMovement();
         }
+        else
+        {
+            playerRigidbody2D.velocity = Vector2.zero;
+        }
     }
 
     private void HandleEndurance()

@@ -13,7 +13,7 @@ public class InventoryUIManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
             if (playerInventoryUI.activeSelf && !containerUI.activeSelf)
             {

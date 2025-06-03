@@ -17,7 +17,7 @@ public class WeaponControl : MonoBehaviour
     public TextMeshProUGUI weaponMaxAmmo;
     public GameObject playerInventoryUI;
     private Weapon _curWeapon;
-    private float _lastFireTime;
+    private float _lastFireTime = -1f;
     private bool _reloading;
 
     void Start()
@@ -156,5 +156,10 @@ public class WeaponControl : MonoBehaviour
     public void SetReloading(bool b)
     {
         _reloading = b;
+    }
+    
+    public float GetLastFireTime()
+    {
+        return _lastFireTime;
     }
 }

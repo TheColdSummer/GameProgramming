@@ -13,13 +13,6 @@ public class EnemyWeaponControl : MonoBehaviour
 
     void Start()
     {
-        Weapon testWeapon = Resources.Load<Weapon>("Weapon/AKM");
-        if (testWeapon == null)
-        {
-            Debug.LogError("Weapon not found in Resources folder.");
-            return;
-        }
-        ChangeWeapon(testWeapon);
     }
 
     // Update is called once per frame
