@@ -15,9 +15,18 @@ public enum StateType
 public class FSM : MonoBehaviour
 {
     private IState _currentState;
+    private GameObject _player;
+    private Pathfinding _pathFinding;
     private Dictionary<StateType, IState> _states = new Dictionary<StateType, IState>();
     void Start()
     {
+        _player = GameObject.Find("Player");
+        if (_player == null)
+        {
+            Debug.LogError("Player GameObject not found.");
+            return;
+        }
+        _pathFinding = GameObject.Find("GridMap").GetComponent<Pathfinding>();
         _states[StateType.Idle] = new IdleState(this);
         _states[StateType.Alert] = new AlertState(this);
         _states[StateType.Chase] = new ChaseState(this);
@@ -52,5 +61,15 @@ public class FSM : MonoBehaviour
         }
         _currentState = _states[state];
         _currentState.OnEnter();
+    }
+
+    public GameObject GetPlayer()
+    {
+        return _player;
+    }
+
+    public Pathfinding GetPathFinding()
+    {
+        return _pathFinding;
     }
 }

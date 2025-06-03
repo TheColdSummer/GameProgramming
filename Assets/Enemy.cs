@@ -17,12 +17,17 @@ public class Enemy : MonoBehaviour
     public GameObject gunFireRange;
     public GameObject attackRange;
     public GameObject containers;
+    public GameObject question;
+    public GameObject exclaimRed;
+    public GameObject exclaimYellow;
     private GameObject _idleRange;
-    
+    private FSM _fsm;
+
     // Start is called before the first frame update
     void Start()
     {
         InitEnemy();
+        _fsm = GetComponent<FSM>();
     }
 
     private void InitEnemy()
@@ -49,12 +54,13 @@ public class Enemy : MonoBehaviour
         {
             level = 5;
         }
+
         InitBackpack(backpack, level);
         InitChestRig(chestRig, level);
         InitHelmet(helmet, level);
         InitBodyArmor(bodyArmor, level);
-        
-        
+
+
         int w = Random.Range(1, 8);
         switch (w)
         {
@@ -80,6 +86,7 @@ public class Enemy : MonoBehaviour
                 InitWeapon(weapon, "SVD");
                 break;
         }
+
         ChangeWeapon(weapon);
         if (containers == null)
         {
@@ -90,7 +97,7 @@ public class Enemy : MonoBehaviour
             }
         }
     }
-    
+
     private void InitWeapon(Weapon w, string wName)
     {
         Weapon wm = Resources.Load<Weapon>("Weapon/" + wName);
@@ -181,7 +188,7 @@ public class Enemy : MonoBehaviour
     private void InitBackpack(Backpack b, int level)
     {
         Backpack bm = Resources.Load<Backpack>("Backpack/Backpack" + level);
-        
+
         if (bm != null)
         {
             b.itemName = bm.itemName;
@@ -201,7 +208,6 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     public void CauseHeadDamage(int bulletArmorDamage, int bulletBodyDamage)
@@ -243,7 +249,7 @@ public class Enemy : MonoBehaviour
             ChangeHealthDelta(-bulletBodyDamage);
         }
     }
-    
+
     public void ChangeHealthDelta(int delta)
     {
         currentHp += delta;
@@ -252,12 +258,13 @@ public class Enemy : MonoBehaviour
             currentHp = 0;
             Die();
         }
+
         if (currentHp > maxHp)
         {
             currentHp = maxHp;
         }
     }
-    
+
     public void ChangeWeapon(Item equipment)
     {
         if (equipment is Weapon weaponItem)
@@ -276,12 +283,12 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject.GetComponent<HitDetector>());
         Destroy(gameObject.GetComponent<Rigidbody2D>());
         Destroy(gameObject.GetComponent<BoxCollider2D>());
-        
+
         FSM fsm = gameObject.GetComponent<FSM>();
         fsm.TransitionToState(StateType.Die);
-        
+
         transform.Rotate(0, 0, 90);
-        
+
         GameObject container = Instantiate(Resources.Load<GameObject>("Container"), containers.transform);
         container.transform.position = transform.position;
         Container containerScript = container.GetComponent<Container>();
@@ -290,30 +297,35 @@ public class Enemy : MonoBehaviour
             Debug.LogError("Container script not found on the instantiated container.");
             return;
         }
+
         List<Item> items = new List<Item>();
         if (backpack != null)
         {
             items.Add(backpack);
         }
+
         if (chestRig != null)
         {
             items.Add(chestRig);
         }
+
         if (helmet != null)
         {
             items.Add(helmet);
         }
+
         if (bodyArmor != null)
         {
             items.Add(bodyArmor);
         }
+
         if (weapon != null)
         {
             weapon.currentAmmo = Random.Range(0, weapon.capacity);
             items.Add(weapon);
         }
+
         containerScript.AddItems(items);
-        
     }
 
     public void SetIdleRange(GameObject idleRangeObject)
@@ -323,6 +335,7 @@ public class Enemy : MonoBehaviour
             Debug.LogError("Idle range object is null. Cannot set idle range.");
             return;
         }
+
         _idleRange = idleRangeObject;
         _idleRange.SetActive(true);
     }
@@ -334,6 +347,105 @@ public class Enemy : MonoBehaviour
             Debug.LogError("Idle range is not set. Returning null.");
             return null;
         }
+
         return _idleRange;
+    }
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Vector2 enemyPos = transform.position;
+            Vector2 playerPos = other.transform.position;
+            if (visualRange == null)
+            {
+                Debug.LogError("Visual range is not set. Cannot check visibility.");
+                return;
+            }
+
+            if (visualRange.GetComponent<CircleCollider2D>() == null)
+            {
+                Debug.LogError("Visual range collider is not set. Cannot check visibility.");
+                return;
+            }
+
+            float visualRadius = visualRange.GetComponent<CircleCollider2D>().radius *
+                                 visualRange.transform.lossyScale.x;
+            float vDist = Vector2.Distance(enemyPos, playerPos);
+            if (vDist > visualRadius)
+            {
+                return;
+            }
+
+            RaycastHit2D hit = Physics2D.Linecast(enemyPos, playerPos, LayerMask.GetMask("Wall"));
+            if (hit.collider == null || !hit.collider.CompareTag("Wall"))
+            {
+                StateType currentState = _fsm.CurrentState();
+                if (attackRange != null)
+                {
+                    CircleCollider2D attackCollider = attackRange.GetComponent<CircleCollider2D>();
+                    float attackRadius = attackCollider.radius * attackRange.transform.lossyScale.x;
+                    float dist = Vector2.Distance(enemyPos, playerPos);
+
+                    if (dist <= attackRadius &&
+                        (currentState == StateType.Idle || currentState == StateType.Alert ||
+                         currentState == StateType.Chase))
+                    {
+                        _fsm.TransitionToState(StateType.Attack);
+                    }
+                    else if (dist > attackRadius &&
+                             (currentState == StateType.Idle || currentState == StateType.Alert ||
+                              currentState == StateType.Attack))
+                    {
+                        _fsm.TransitionToState(StateType.Chase);
+                    }
+                }
+            }
+            else if (hit.collider.CompareTag("Wall"))
+            {
+                if (_fsm.CurrentState() != StateType.Alert && _fsm.CurrentState() != StateType.Idle)
+                {
+                    _fsm.TransitionToState(StateType.Idle);
+                }
+            }
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player") && _fsm.CurrentState() != StateType.Idle &&
+            _fsm.CurrentState() != StateType.Alert && visualRange != null &&
+            other == visualRange.GetComponent<Collider2D>())
+        {
+            _fsm.TransitionToState(StateType.Idle);
+        }
+    }
+
+    public void NoQuestion()
+    {
+        question.SetActive(false);
+        exclaimRed.SetActive(false);
+        exclaimYellow.SetActive(false);
+    }
+
+    public void Question()
+    {
+        question.SetActive(true);
+        exclaimRed.SetActive(false);
+        exclaimYellow.SetActive(false);
+    }
+    
+    public void ExclaimRed()
+    {
+        question.SetActive(false);
+        exclaimRed.SetActive(true);
+        exclaimYellow.SetActive(false);
+    }
+    
+    public void ExclaimYellow()
+    {
+        question.SetActive(false);
+        exclaimRed.SetActive(false);
+        exclaimYellow.SetActive(true);
     }
 }

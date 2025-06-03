@@ -28,7 +28,7 @@ public class GridMap : MonoBehaviour
             for (int y = 0; y < _gridSizeY; y++)
             {
                 Vector2 worldPoint = worldBottomLeft + Vector2.right * (x * _nodeDiameter + nodeRadius) + Vector2.up * (y * _nodeDiameter + nodeRadius);
-                bool walkable = !Physics2D.OverlapCircle(worldPoint, nodeRadius + 1f, unwalkableMask);
+                bool walkable = !Physics2D.OverlapCircle(worldPoint, nodeRadius, unwalkableMask);
                 _grid[x, y] = new Node(walkable, worldPoint, x, y);
             }
         }

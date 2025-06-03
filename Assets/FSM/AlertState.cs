@@ -19,14 +19,16 @@ public class AlertState : IState
     {
         _fsm = fsm;
         _enemy = fsm.gameObject;
-        _player = GameObject.Find("Player");
+        _player = fsm.GetPlayer();
         _rb = _enemy.GetComponent<Rigidbody2D>();
-        _pathfinding = GameObject.Find("GridMap").GetComponent<Pathfinding>();
+        _pathfinding = fsm.GetPathFinding();
         _animator = _enemy.GetComponent<Animator>();
     }
 
     public void OnEnter()
     {
+        _enemy.GetComponent<Enemy>().Question();
+        _enemy.GetComponent<CapsuleCollider2D>().isTrigger = true;
         _pathReady = false;
         if (_player != null)
         {
@@ -64,6 +66,8 @@ public class AlertState : IState
 
     public void OnExit()
     {
+        _enemy.GetComponent<Enemy>().NoQuestion();
+        _enemy.GetComponent<CapsuleCollider2D>().isTrigger = false;
         if (_rb != null)
             _rb.velocity = Vector2.zero;
         if (_animator != null)

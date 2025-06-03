@@ -38,18 +38,18 @@ public class IdleState : IState
         {
             Debug.LogError("IdleState initialization failed: Missing components on enemy.");
         }
-        GameObject gridMapObj = GameObject.Find("GridMap");
-        if (gridMapObj != null)
-            _pathfinding = gridMapObj.GetComponent<Pathfinding>();
+        _pathfinding = fsm.GetPathFinding();
     }
 
     public void OnEnter()
     {
+        _enemy.GetComponent<CapsuleCollider2D>().isTrigger = true;
         ChooseRandomAction();
     }
 
     public void OnExit()
     {
+        _enemy.GetComponent<CapsuleCollider2D>().isTrigger = true;
         if (_rb != null)
             _rb.velocity = Vector2.zero;
         if (_animator != null)
@@ -67,7 +67,7 @@ public class IdleState : IState
 
         if (_currentAction == IdleAction.AdjustPosition)
         {
-            MoveAround(_moveSpeed * 2f);
+            MoveAround(_moveSpeed * 3f);
         }
 
         GameObject idleRangeObj = _enemyScript.GetIdleRange();
@@ -138,6 +138,7 @@ public class IdleState : IState
 
     private void ChooseRandomAction()
     {
+        _enemy.GetComponent<CapsuleCollider2D>().isTrigger = false;
         _timer = 0f;
         _actionTime = Random.Range(1f, 4f);
         if (Random.value < 0.5f)
@@ -222,10 +223,11 @@ public class IdleState : IState
             _pathReady = false;
             return;
         }
+        _enemy.GetComponent<CapsuleCollider2D>().isTrigger = true;
 
         Vector2 targetPos = _pathToCenter[_currentNodeIndex].worldPosition;
         Vector2 currentPos = _rb.position;
-        Vector2 newPos = Vector2.MoveTowards(currentPos, targetPos, 10 * _moveSpeed * Time.deltaTime);
+        Vector2 newPos = Vector2.MoveTowards(currentPos, targetPos, 14 * _moveSpeed * Time.deltaTime);
         _rb.MovePosition(newPos);
 
         Vector2 dir = targetPos - currentPos;

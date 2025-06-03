@@ -10,63 +10,68 @@ public class EnemyWeaponControl : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     private Weapon _curWeapon;
     private float _lastFireTime;
+    private bool _fire;
 
     void Start()
     {
+        _fire = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Vector2 mousePosition = Input.mousePosition;
-        // Vector3 mouseScreenPosition = new Vector3(mousePosition.x, mousePosition.y, Camera.main.nearClipPlane);
-        // Vector3 screenPosition = characterCamera.WorldToScreenPoint(transform.position);
-        //
-        // Vector3 direction = screenPosition - mouseScreenPosition;
-        //
-        // direction.z = 0;
-        //
-        // float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        // if (angle < -90 || angle > 90)
-        // {
-        //     Vector2 scale = transform.localScale;
-        //     scale.x = -Mathf.Abs(scale.x);
-        //     transform.localScale = scale;
-        //     transform.rotation = Quaternion.Euler(0, 0, 180 + angle);
-        // }
-        // else
-        // {
-        //     Vector2 scale = transform.localScale;
-        //     scale.x = Mathf.Abs(scale.x);
-        //     transform.localScale = scale;
-        //     transform.rotation = Quaternion.Euler(0, 0, angle);
-        // }
-        //
-        // if (_curWeapon != null)
-        // {
-        //     if (_curWeapon.mode == 0)
-        //     {
-        //         if (Input.GetMouseButtonDown(0) && Time.time - _lastFireTime >= (float)60 / _curWeapon.RPM)
-        //         {
-        //             Fire();
-        //             _lastFireTime = Time.time;
-        //         }
-        //     }
-        //     else if (_curWeapon.mode == 1)
-        //     {
-        //         if (Input.GetMouseButton(0) && Time.time - _lastFireTime >= (float)60 / _curWeapon.RPM)
-        //         {
-        //             Fire();
-        //             _lastFireTime = Time.time;
-        //         }
-        //     }
-        // }
+        if (_curWeapon != null)
+        {
+            if (!_fire) return;
+            if (_curWeapon.mode == 0)
+            {
+                if (Time.time - _lastFireTime >= (float)60 / _curWeapon.RPM)
+                {
+                    Fire();
+                    _lastFireTime = Time.time;
+                }
+            }
+            else if (_curWeapon.mode == 1)
+            {
+                if (Time.time - _lastFireTime >= (float)60 / _curWeapon.RPM)
+                {
+                    Fire();
+                    _lastFireTime = Time.time;
+                }
+            }
+        }
     }
     
-    void Fire()
+    public void AimAt(Vector2 direction)
+    {
+        if (directionPoint == null || firePoint == null)
+        {
+            Debug.LogError("DirectionPoint or FirePoint is not assigned.");
+            return;
+        }
+        
+        Vector2 aimDirection = (direction - (Vector2)gameObject.transform.position).normalized;
+        float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
+        if (angle < -90 || angle > 90)
+        {
+            Vector2 scale = transform.localScale;
+            scale.x = Mathf.Abs(scale.x);
+            transform.localScale = scale;
+            transform.rotation = Quaternion.Euler(0, 0, 180 + angle);
+        }
+        else
+        {
+            Vector2 scale = transform.localScale;
+            scale.x = -Mathf.Abs(scale.x);
+            transform.localScale = scale;
+            transform.rotation = Quaternion.Euler(0, 0, angle);
+        }
+    }
+
+    public void Fire()
     {
         Vector2 direction = (directionPoint.position - firePoint.position).normalized;
-        float maxAngle = Mathf.Lerp(5f, 0f, Mathf.Clamp01(_curWeapon.control / 100f));
+        float maxAngle = Mathf.Lerp(40f, 10f, Mathf.Clamp01(_curWeapon.control / 100f));
         float randomAngle = Random.Range(-maxAngle, maxAngle);
         direction = (Quaternion.Euler(0, 0, randomAngle) * direction).normalized;
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
@@ -94,5 +99,15 @@ public class EnemyWeaponControl : MonoBehaviour
             }
             Debug.Log("Weapon changed to: " + _curWeapon);
         }
+    }
+
+    public void StartFire()
+    {
+        _fire = true;
+    }
+
+    public void StopFire()
+    {
+        _fire = false;
     }
 }
