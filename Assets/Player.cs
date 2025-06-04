@@ -142,6 +142,28 @@ public class Player : MonoBehaviour
         {
             hpBar.SetValue(currentHp, maxHp);
         }
+        
+        if (currentHp == 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        GameObject eventSystem = GameObject.Find("EventSystem");
+        if (eventSystem != null)
+        {
+            Extract extract = eventSystem.GetComponent<Extract>();
+            if (extract != null)
+            {
+                extract.Gameover(false);
+            }
+        }
+        else
+        {
+            Debug.LogError("EventSystem not found in the scene.");
+        }
     }
 
     public void ChangeRepletionDelta(int delta)

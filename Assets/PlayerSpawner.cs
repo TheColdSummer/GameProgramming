@@ -22,6 +22,17 @@ public class PlayerSpawner : MonoBehaviour
             int randomIndex = Random.Range(0, spawnPoints.Count);
             Transform spawnPoint = spawnPoints[randomIndex];
             player.transform.position = new Vector3(spawnPoint.position.x, spawnPoint.position.y, player.transform.position.z);
+            spawnPoints.RemoveAt(randomIndex);
+            for (int i = 0; i < 3; i++)
+            {
+                Debug.Log("Extracting spawn point: " + i);
+                int extractionIndex = Random.Range(0, spawnPoints.Count);
+                GameObject ep = Resources.Load<GameObject>("ExtractionPoint");
+                Vector3 p = new Vector3(spawnPoints[i].position.x, spawnPoints[i].position.y, ep.transform.position.z);
+                GameObject extractionPoint = Instantiate(Resources.Load<GameObject>("ExtractionPoint"), p, Quaternion.identity);
+                extractionPoint.transform.SetParent(GameObject.Find("Map/ExtractionPoint").transform);
+                spawnPoints.RemoveAt(extractionIndex);
+            }
         }
         else
         {

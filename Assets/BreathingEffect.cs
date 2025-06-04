@@ -4,28 +4,24 @@ using UnityEngine;
 
 public class BreathingEffect : MonoBehaviour
 {
-    private bool isPlayerNearby = false;
-    private SpriteRenderer spriteRenderer;
-    private Coroutine breathingCoroutine;
+    private bool _isPlayerNearby = false;
+    private SpriteRenderer _spriteRenderer;
+    private Coroutine _breathingCoroutine;
 
     void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
         ResetTransparency();
-    }
-
-    void Update()
-    {
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            isPlayerNearby = true;
-            if (breathingCoroutine == null)
+            _isPlayerNearby = true;
+            if (_breathingCoroutine == null)
             {
-                breathingCoroutine = StartCoroutine(Breathing());
+                _breathingCoroutine = StartCoroutine(Breathing());
             }
         }
     }
@@ -34,11 +30,11 @@ public class BreathingEffect : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            isPlayerNearby = false;
-            if (breathingCoroutine != null)
+            _isPlayerNearby = false;
+            if (_breathingCoroutine != null)
             {
-                StopCoroutine(breathingCoroutine);
-                breathingCoroutine = null;
+                StopCoroutine(_breathingCoroutine);
+                _breathingCoroutine = null;
                 ResetTransparency();
             }
         }
@@ -51,13 +47,13 @@ public class BreathingEffect : MonoBehaviour
         while (true)
         {
             alpha = Mathf.PingPong(Time.time * speed, 1.0f);
-            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, alpha);
+            _spriteRenderer.color = new Color(_spriteRenderer.color.r, _spriteRenderer.color.g, _spriteRenderer.color.b, alpha);
             yield return null;
         }
     }
 
     private void ResetTransparency()
     {
-        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0.0f);
+        _spriteRenderer.color = new Color(_spriteRenderer.color.r, _spriteRenderer.color.g, _spriteRenderer.color.b, 0.0f);
     }
 }

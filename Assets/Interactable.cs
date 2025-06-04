@@ -5,7 +5,7 @@ using UnityEngine;
 public class Interactable : MonoBehaviour
 {
     public Container container;
-    private bool isPlayerNearby = false;
+    private bool _isPlayerNearby = false;
     private static GameObject _containerUI;
     private static GameObject _containerContent;
     private static GameObject _playerInventoryUI;
@@ -38,7 +38,7 @@ public class Interactable : MonoBehaviour
 
     void Update()
     {
-        if (isPlayerNearby && !_containerUI.activeSelf && Input.GetKeyDown(KeyCode.F))
+        if (_isPlayerNearby && !_containerUI.activeSelf && Input.GetKeyDown(KeyCode.F))
         {
             OpenUI();
         }
@@ -54,7 +54,7 @@ public class Interactable : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("Player is nearby");
-            isPlayerNearby = true;
+            _isPlayerNearby = true;
         }
     }
 
@@ -63,7 +63,7 @@ public class Interactable : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("Player left the area");
-            isPlayerNearby = false;
+            _isPlayerNearby = false;
         }
     }
 
