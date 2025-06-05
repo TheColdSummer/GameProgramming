@@ -28,7 +28,7 @@ public class SaveLoadManager: MonoBehaviour
     {
         if (!File.Exists(_savePath))
         {
-            Debug.LogError("Save file not found at " + _savePath);
+            Debug.Log("Save file not found at " + _savePath);
             return null;
         }
 
@@ -59,7 +59,7 @@ public class SaveLoadManager: MonoBehaviour
     {
         if (!File.Exists(_savePath))
         {
-            Debug.LogError("Save file not found at " + _savePath);
+            Debug.Log("Save file not found at " + _savePath);
             return null;
         }
 
@@ -69,6 +69,25 @@ public class SaveLoadManager: MonoBehaviour
             TypeNameHandling = TypeNameHandling.All
         });
         return itemDataList;
+    }
+    
+    
+    public void SaveInt(int cash)
+    {
+        string json = JsonConvert.SerializeObject(cash, Formatting.Indented);
+        File.WriteAllText(_savePath, json);
+    }
+
+    public int LoadInt()
+    {
+        if (!File.Exists(_savePath))
+        {
+            Debug.Log("Save file not found at " + _savePath);
+            return 0; // Default value if file doesn't exist
+        }
+        string json = File.ReadAllText(_savePath);
+        int cash = JsonConvert.DeserializeObject<int>(json);
+        return cash;
     }
     
     public GameObject ConstructGameObjectFromItemData(ItemData itemData)
@@ -182,7 +201,6 @@ public class SaveLoadManager: MonoBehaviour
         item.type = itemData.type;
         item.price = itemData.price;
         item.size = itemData.size;
-        Debug.Log("spriteName: " + itemData.spriteName);
         item.sprite = Resources.Load<Sprite>(itemData.spriteName);
         item.id = itemData.id;
     }
@@ -439,7 +457,7 @@ public class SaveLoadManager: MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("No save data found to clear at " + _savePath);
+            Debug.Log("No save data found to clear at " + _savePath);
         }
     }
 }

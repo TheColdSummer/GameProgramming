@@ -78,6 +78,6 @@ public class AttackState : IState
 
     private void ResetFireCooldown()
     {
-        _fireCooldown = Random.Range(1f, 3.5f);
+        _fireCooldown = Random.Range(0.7f, 3.2f);
     }
 }

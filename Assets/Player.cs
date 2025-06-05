@@ -318,6 +318,11 @@ public class Player : MonoBehaviour
 
     public void ChangeHelmet(Item equipment)
     {
+        if (equipment == null)
+        {
+            helmetBar.SetValue(0, 0);
+            return;
+        }
         if (equipment is Helmet helmetItem)
         {
             helmetBar.SetValue(helmetItem.durability, helmetItem.maxDurability);
@@ -330,6 +335,11 @@ public class Player : MonoBehaviour
 
     public void ChangeBodyArmor(Item equipment)
     {
+        if (equipment == null)
+        {
+            armorBar.SetValue(0, 0);
+            return;
+        }
         if (equipment is BodyArmor bodyArmorItem)
         {
             armorBar.SetValue(bodyArmorItem.durability, bodyArmorItem.maxDurability);
@@ -342,6 +352,11 @@ public class Player : MonoBehaviour
 
     public void ChangeWeapon(Item equipment)
     {
+        if (equipment == null)
+        {
+            weaponControl.ChangeWeapon(null);
+            return;
+        }
         if (equipment is Weapon weaponItem)
         {
             weaponControl.ChangeWeapon(weaponItem);
@@ -374,6 +389,15 @@ public class Player : MonoBehaviour
     
     private void CheckRepletionHydrationAndAffectHealth()
     {
+        if (currentRepletion <= 35 || currentHydration <= 35)
+        {
+            GetComponent<Move>().weak(true);
+        }
+        else
+        {
+            GetComponent<Move>().weak(false);
+        }
+        
         if (currentRepletion == 0 || currentHydration == 0)
         {
             if (_hpLossCoroutine == null)
@@ -398,5 +422,26 @@ public class Player : MonoBehaviour
     {
         float lastFireTime = weaponControl.GetLastFireTime();
         return Time.time - lastFireTime < 0.3f;
+    }
+
+    public void UnequipItem(Item equipped)
+    {
+        if (equipped == null)
+        {
+            Debug.LogWarning("Unequipped item is null");
+        }
+
+        if (equipped is Helmet)
+        {
+            ChangeHelmet(null);
+        }
+        else if (equipped is BodyArmor)
+        {
+            ChangeBodyArmor(null);
+        }
+        else if (equipped is Weapon)
+        {
+            ChangeWeapon(null);
+        }
     }
 }

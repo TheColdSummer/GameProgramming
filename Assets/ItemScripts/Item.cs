@@ -26,14 +26,6 @@ public abstract class Item : MonoBehaviour
             {
                 image.sprite = sprite;
             }
-            else
-            {
-                Debug.LogError("Image component not found on the Image GameObject.");
-            }
-        }
-        else
-        {
-            Debug.LogError("Image GameObject not found as a child of Item.");
         }
 
         Transform textTransform = transform.Find("Text");
@@ -66,10 +58,6 @@ public abstract class Item : MonoBehaviour
             {
                 Debug.LogError("Price object not found in the Text GameObject.");
             }
-        }
-        else
-        {
-            Debug.LogError("Text GameObject not found as a child of Item.");
         }
     }
 

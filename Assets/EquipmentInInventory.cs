@@ -1,20 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EquipmentInInventory : MonoBehaviour
 {
     public Item equipment;
     private GameObject _correspondingItemObject;
     public string type;
-
+    public bool template = false;
     public static Sprite defaultImage;
-    // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
-        _correspondingItemObject = null;
-        equipment = null;
-        defaultImage = GetComponentInChildren<UnityEngine.UI.Image>().GetComponent<UnityEngine.UI.Image>().sprite;
+        if (template)
+        {
+            defaultImage = GetComponentInChildren<Image>().GetComponent<Image>().sprite;
+        }
     }
 
     public GameObject ChangeEquipment(GameObject newEquipment)

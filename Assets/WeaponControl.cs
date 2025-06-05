@@ -50,7 +50,10 @@ public class WeaponControl : MonoBehaviour
             transform.localScale = scale;
             transform.rotation = Quaternion.Euler(0, 0, angle);
         }
-        
+        if (playerInventoryUI == null)
+        {
+            return;
+        }
         if (!playerInventoryUI.activeSelf && _curWeapon != null && !_reloading)
         {
             if (_curWeapon.mode == 0)
@@ -94,7 +97,16 @@ public class WeaponControl : MonoBehaviour
     {
         if (weapon == null)
         {
-            Debug.LogError("Weapon is null. Cannot change weapon.");
+            _curWeapon = null;
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.GetComponent<SpriteRenderer>().sprite = null;
+                UpdateWeaponDisplay(null);
+            }
+            else
+            {
+                Debug.LogWarning("SpriteRenderer component not found on the weapon object.");
+            }
             return;
         }
         if (!_curWeapon || _curWeapon.itemName != weapon.itemName)
@@ -115,6 +127,13 @@ public class WeaponControl : MonoBehaviour
 
     public void UpdateWeaponDisplay(Weapon weapon)
     {
+        if (weapon == null)
+        {
+            weaponImage.sprite = Resources.Load<Sprite>("Transparent");
+            weaponCurAmmo.text = "0";
+            weaponMaxAmmo.text = "0";
+            return;
+        }
         weaponImage.sprite = weapon.sprite;
         weaponCurAmmo.text = weapon.currentAmmo.ToString();
         weaponMaxAmmo.text = weapon.capacity.ToString();

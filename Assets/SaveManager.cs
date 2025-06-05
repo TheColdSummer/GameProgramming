@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SaveManager : MonoBehaviour
 {
@@ -20,9 +21,10 @@ public class SaveManager : MonoBehaviour
     private string _armorFilePath;
     private string _weaponFilePath;
     private string _warehouseFilePath;
+    private string _cashFilePath;
     private SaveLoadManager _saveLoadManager;
     
-    void Start()
+    void OnEnable()
     {
         _backpackFilePath = Application.persistentDataPath + "/backpack.json";
         _chestRigFilePath = Application.persistentDataPath + "/chestRig.json";
@@ -31,6 +33,7 @@ public class SaveManager : MonoBehaviour
         _armorFilePath = Application.persistentDataPath + "/armor.json";
         _weaponFilePath = Application.persistentDataPath + "/weapon.json";
         _warehouseFilePath = Application.persistentDataPath + "/warehouse.json";
+        _cashFilePath = Application.persistentDataPath + "/cash.json";
         _saveLoadManager = new SaveLoadManager();
     }
     
@@ -89,6 +92,11 @@ public class SaveManager : MonoBehaviour
             _saveLoadManager.SaveItem(equippedWeapon);
         }
         
+        SaveWarehouse();
+    }
+
+    public void SaveWarehouse()
+    {
         if (warehouse != null)
         {
             _saveLoadManager.SetPath(_warehouseFilePath);
@@ -103,6 +111,10 @@ public class SaveManager : MonoBehaviour
                 }
             }
             _saveLoadManager.SaveItems(warehouseItems);
+            _saveLoadManager.SetPath(_cashFilePath);
+            _saveLoadManager.ClearSaveData();
+            int cash = warehouse.GetComponent<Warehouse>().Cash;
+            _saveLoadManager.SaveInt(cash);
         }
     }
 
@@ -110,48 +122,106 @@ public class SaveManager : MonoBehaviour
     {
         _saveLoadManager.SetPath(_backpackFilePath);
         ItemData loadedBackpack = _saveLoadManager.LoadItem();
-        backpack.GetComponent<EquipmentInInventory>()
-            .ChangeEquipment(_saveLoadManager.ConstructGameObjectFromItemData(loadedBackpack));
+        if (loadedBackpack != null)
+        {
+            backpack.GetComponent<EquipmentInInventory>()
+                .ChangeEquipment(_saveLoadManager.ConstructGameObjectFromItemData(loadedBackpack));
+        }
         
         _saveLoadManager.SetPath(_chestRigFilePath);
         ItemData loadedChestRig = _saveLoadManager.LoadItem();
-        chestRig.GetComponent<EquipmentInInventory>()
-            .ChangeEquipment(_saveLoadManager.ConstructGameObjectFromItemData(loadedChestRig));
+        if (loadedChestRig != null)
+        {
+            chestRig.GetComponent<EquipmentInInventory>()
+                .ChangeEquipment(_saveLoadManager.ConstructGameObjectFromItemData(loadedChestRig));
+        }
         
         _saveLoadManager.SetPath(_backpackItemsFilePath);
         List<ItemData> loadedBackpackItems = _saveLoadManager.LoadItems();
-        foreach (ItemData itemData in loadedBackpackItems)
+        if (loadedBackpackItems != null)
         {
-            GameObject itemObject = _saveLoadManager.ConstructGameObjectFromItemData(itemData);
-            itemObject.transform.SetParent(backpackItems.transform, false);
-            itemObject.SetActive(true);
+            foreach (ItemData itemData in loadedBackpackItems)
+            {
+                GameObject itemObject = _saveLoadManager.ConstructGameObjectFromItemData(itemData);
+                itemObject.transform.SetParent(backpackItems.transform, false);
+                itemObject.SetActive(true);
+            }
+            GameObject playerInventory = GameObject.Find("Canvas/InventoryWithContainer/PlayerInventory");
+            if (playerInventory != null)
+            {
+                playerInventory.GetComponent<PlayerInventory>().RefreshRemainingSpace();
+            }
         }
         
         _saveLoadManager.SetPath(_helmetFilePath);
         ItemData loadedHelmet = _saveLoadManager.LoadItem();
-        helmet.GetComponent<EquipmentInInventory>()
-            .ChangeEquipment(_saveLoadManager.ConstructGameObjectFromItemData(loadedHelmet));
+        if (loadedHelmet != null)
+        {
+            helmet.GetComponent<EquipmentInInventory>()
+                .ChangeEquipment(_saveLoadManager.ConstructGameObjectFromItemData(loadedHelmet));
+        }
         
         _saveLoadManager.SetPath(_armorFilePath);
         ItemData loadedArmor = _saveLoadManager.LoadItem();
-        armor.GetComponent<EquipmentInInventory>()
-            .ChangeEquipment(_saveLoadManager.ConstructGameObjectFromItemData(loadedArmor));
+        if (loadedArmor != null)
+        {
+            armor.GetComponent<EquipmentInInventory>()
+                .ChangeEquipment(_saveLoadManager.ConstructGameObjectFromItemData(loadedArmor));
+        }
         
         _saveLoadManager.SetPath(_weaponFilePath);
         ItemData loadedWeapon = _saveLoadManager.LoadItem();
-        weapon.GetComponent<EquipmentInInventory>()
-            .ChangeEquipment(_saveLoadManager.ConstructGameObjectFromItemData(loadedWeapon));
+        if (loadedWeapon != null)
+        {
+            weapon.GetComponent<EquipmentInInventory>()
+                .ChangeEquipment(_saveLoadManager.ConstructGameObjectFromItemData(loadedWeapon));
+        }
 
+        LoadWarehouse();
+    }
+
+    public void LoadWarehouse()
+    {
         if (warehouse != null)
         {
             _saveLoadManager.SetPath(_warehouseFilePath);
             List<ItemData> loadedWarehouseItems = _saveLoadManager.LoadItems();
-            foreach (ItemData itemData in loadedWarehouseItems)
+            if (loadedWarehouseItems != null)
             {
-                GameObject itemObject = _saveLoadManager.ConstructGameObjectFromItemData(itemData);
-                itemObject.transform.SetParent(warehouse.transform, false);
-                itemObject.SetActive(true);
+                foreach (ItemData itemData in loadedWarehouseItems)
+                {
+                    GameObject itemObject = _saveLoadManager.ConstructGameObjectFromItemData(itemData);
+                    itemObject.transform.SetParent(warehouse.transform, false);
+                    itemObject.SetActive(true);
+                }
+            }
+            _saveLoadManager.SetPath(_cashFilePath);
+            int loadedCash = _saveLoadManager.LoadInt();
+            if (loadedCash >= 0)
+            {
+                warehouse.GetComponent<Warehouse>().Cash = loadedCash;
+            }
+            else
+            {
+                Debug.LogWarning("Loaded cash value is negative, resetting to zero.");
+                warehouse.GetComponent<Warehouse>().Cash = 0;
             }
         }
+    }
+
+    public void GameFail()
+    {
+        _saveLoadManager.SetPath(_backpackFilePath);
+        _saveLoadManager.ClearSaveData();
+        _saveLoadManager.SetPath(_chestRigFilePath);
+        _saveLoadManager.ClearSaveData();
+        _saveLoadManager.SetPath(_backpackItemsFilePath);
+        _saveLoadManager.ClearSaveData();
+        _saveLoadManager.SetPath(_helmetFilePath);
+        _saveLoadManager.ClearSaveData();
+        _saveLoadManager.SetPath(_armorFilePath);
+        _saveLoadManager.ClearSaveData();
+        _saveLoadManager.SetPath(_weaponFilePath);
+        _saveLoadManager.ClearSaveData();
     }
 }

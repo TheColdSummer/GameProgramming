@@ -15,18 +15,6 @@ public class PlayerInventory : MonoBehaviour
     public GameObject containerContent;
     public Player player;
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    
     bool AddItemToInventory(GameObject item)
     {
         if (item == null)
@@ -154,7 +142,10 @@ public class PlayerInventory : MonoBehaviour
                             }
                         }
                         ret = helmetScript.ChangeEquipment(equipmentObject);
-                        player.ChangeHelmet(equipment);
+                        if (player != null)
+                        {
+                            player.ChangeHelmet(equipment);
+                        }
                     }
                     else
                     {
@@ -182,7 +173,10 @@ public class PlayerInventory : MonoBehaviour
                             }
                         }
                         ret = armorScript.ChangeEquipment(equipmentObject);
-                        player.ChangeBodyArmor(equipment);
+                        if (player != null)
+                        {
+                            player.ChangeBodyArmor(equipment);
+                        }
                     }
                     else
                     {
@@ -210,7 +204,10 @@ public class PlayerInventory : MonoBehaviour
                             }
                         }
                         ret = weaponScript.ChangeEquipment(equipmentObject);
-                        player.ChangeWeapon(equipment);
+                        if (player != null)
+                        {
+                            player.ChangeWeapon(equipment);
+                        }
                     }
                     else
                     {
@@ -299,7 +296,10 @@ public class PlayerInventory : MonoBehaviour
                     if (helmetScript != null)
                     {
                         ret = helmetScript.ChangeEquipment(equipmentObject);
-                        player.ChangeHelmet(equipment);
+                        if (player != null)
+                        {
+                            player.ChangeHelmet(equipment);
+                        }
                     }
                     else
                     {
@@ -318,7 +318,10 @@ public class PlayerInventory : MonoBehaviour
                     if (armorScript != null)
                     {
                         ret = armorScript.ChangeEquipment(equipmentObject);
-                        player.ChangeBodyArmor(equipment);
+                        if (player != null)
+                        {
+                            player.ChangeBodyArmor(equipment);
+                        }
                     }
                     else
                     {
@@ -337,7 +340,10 @@ public class PlayerInventory : MonoBehaviour
                     if (weaponScript != null)
                     {
                         ret = weaponScript.ChangeEquipment(equipmentObject);
-                        player.ChangeWeapon(equipment);
+                        if (player != null)
+                        {
+                            player.ChangeWeapon(equipment);
+                        }
                     }
                     else
                     {
@@ -476,7 +482,11 @@ public class PlayerInventory : MonoBehaviour
             Debug.LogWarning("Not enough space in inventory to drop: " + equipped.itemName);
             return;
         }
-        
+
+        if (player != null)
+        {
+            player.UnequipItem(equipped);
+        }
         GameObject itemToDrop = equipmentInInventory.ChangeEquipment(null);
         if (itemToDrop == null)
         {
@@ -512,7 +522,11 @@ public class PlayerInventory : MonoBehaviour
             Debug.LogWarning("Not enough space in inventory to unequip: " + equipped.itemName);
             return;
         }
-        
+
+        if (player != null)
+        {
+            player.UnequipItem(equipped);
+        }
         GameObject itemToUnequip = equipmentInInventory.ChangeEquipment(null);
         if (itemToUnequip == null)
         {

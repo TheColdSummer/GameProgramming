@@ -1,15 +1,15 @@
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class RightClickMenu : MonoBehaviour
+public class RightClickMenuInWarehouse : MonoBehaviour
 {
     public GameObject playerInventory;
-    public GameObject containerUI;
     public GameObject choicePrefab;
     public GameObject descriptionPanel;
     public GameObject descriptionText;
+    public Warehouse warehouse;
     private RectTransform menuRectTransform;
     private PlayerInventory playerInventoryScript;
 
@@ -27,6 +27,7 @@ public class RightClickMenu : MonoBehaviour
         {
             Debug.LogError("PlayerInventory script not found on the playerInventory GameObject.");
         }
+
         RightClickHandler.RightClickMenuPanel = gameObject;
         gameObject.SetActive(false);
         descriptionPanel.transform.Find("Button").GetComponent<Button>().onClick.AddListener(() =>
@@ -35,7 +36,6 @@ public class RightClickMenu : MonoBehaviour
             descriptionText.GetComponent<TMPro.TextMeshProUGUI>().text = string.Empty;
         });
         descriptionPanel.SetActive(false);
-
     }
 
     void Update()
@@ -61,7 +61,7 @@ public class RightClickMenu : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-        
+
         if (clickedGameObject.CompareTag("Item"))
         {
             Item item = clickedGameObject.GetComponent<Item>();
@@ -70,6 +70,7 @@ public class RightClickMenu : MonoBehaviour
                 Debug.LogError("Item script not found on the GameObject.");
                 return false;
             }
+
             AddMenuItem("Description", () => ShowDescription(item));
             ConfigureItem(clickedGameObject);
         }
@@ -81,6 +82,7 @@ public class RightClickMenu : MonoBehaviour
                 Debug.LogError("EquipmentInInventory script found, but no equipment assigned.");
                 return false;
             }
+
             AddMenuItem("Description", () => ShowDescription(item));
             ConfigureEquippedItem(clickedGameObject);
         }
@@ -88,6 +90,7 @@ public class RightClickMenu : MonoBehaviour
         {
             Debug.LogWarning("Right-click menu configured for an unsupported GameObject type.");
         }
+
         return true;
     }
 
@@ -99,6 +102,7 @@ public class RightClickMenu : MonoBehaviour
             Debug.LogError("Description panel or text not set in the RightClickMenu.");
             return;
         }
+
         descriptionPanel.SetActive(true);
         descriptionText.GetComponent<TMPro.TextMeshProUGUI>().text = description;
     }
@@ -114,10 +118,7 @@ public class RightClickMenu : MonoBehaviour
 
         if (playerInventoryScript.CheckIfItemInInventory(clickedGameObject))
         {
-            if (containerUI.activeSelf)
-            {
-                AddMenuItem("Drop", () => playerInventoryScript.DropItem(clickedGameObject));
-            }
+            AddMenuItem("Put Back", () => playerInventoryScript.DropItem(clickedGameObject));
             switch (item.type)
             {
                 case "Helmet":
@@ -127,15 +128,11 @@ public class RightClickMenu : MonoBehaviour
                 case "Chest Rig":
                     AddMenuItem("Equip", () => playerInventoryScript.ChangeEquipment(item));
                     break;
-                case "Food":
-                case "Drink":
-                case "MedicalKit":
-                    AddMenuItem("Use", () => playerInventoryScript.UseConsumable(item as Consumable));
-                    break;
             }
         }
         else
         {
+            AddMenuItem("Sell", () => warehouse.SellItem(clickedGameObject));
             AddMenuItem("Pick", () => playerInventoryScript.PickItem(clickedGameObject));
             switch (item.type)
             {
@@ -145,11 +142,6 @@ public class RightClickMenu : MonoBehaviour
                 case "Backpack":
                 case "Chest Rig":
                     AddMenuItem("Equip", () => playerInventoryScript.ChangeEquipmentFromContainer(item));
-                    break;
-                case "Food":
-                case "Drink":
-                case "MedicalKit":
-                    AddMenuItem("Use", () => playerInventoryScript.UseConsumable(item as Consumable));
                     break;
             }
         }
@@ -163,15 +155,13 @@ public class RightClickMenu : MonoBehaviour
             Debug.LogError("EquipmentInInventory script not found on the GameObject.");
             return;
         }
+
         if (equipmentInInventory.equipment == null)
         {
             return;
         }
 
-        if (containerUI.activeSelf)
-        {
-            AddMenuItem("Drop", () => playerInventoryScript.DropEquippedItem(clickedGameObject));
-        }
+        AddMenuItem("Put Back", () => playerInventoryScript.DropEquippedItem(clickedGameObject));
         AddMenuItem("Unequip", () => playerInventoryScript.UnequipItem(clickedGameObject));
     }
 

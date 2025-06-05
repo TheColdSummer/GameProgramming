@@ -6,10 +6,6 @@ public class InventoryUIManager : MonoBehaviour
 {
     public GameObject containerUI;
     public GameObject playerInventoryUI;
-    void Start()
-    {
-        
-    }
 
     void Update()
     {

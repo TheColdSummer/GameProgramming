@@ -13,6 +13,7 @@ public class Move : MonoBehaviour
     private Animator animator;
 
     private float enduranceTimer = 0f;
+    private bool _weak;
 
     void Start()
     {
@@ -68,7 +69,7 @@ public class Move : MonoBehaviour
         horizontalMovement = Input.GetAxis("Horizontal");
         verticalMovement = Input.GetAxis("Vertical");
 
-        float currentSpeed = speed;
+        float currentSpeed = speed * (_weak ? 0.4f : 1f);
         if (Input.GetKey(KeyCode.LeftShift) && endurance > 0)
         {
             currentSpeed *= 1.5f;
@@ -95,6 +96,11 @@ public class Move : MonoBehaviour
             animator.SetBool("left_move", false);
             animator.SetBool("right_move", false);
         }
+    }
+
+    public void weak(bool b)
+    {
+        _weak = b;
     }
 }
 

@@ -11,9 +11,11 @@ public class Extract : MonoBehaviour
     public GameObject extractTimerObj;
     public TextMeshProUGUI extractTime;
     public Button quitBtn;
+    public SaveManager saveManager;
     
     public void Gameover(bool success)
     {
+        Time.timeScale = 0f;
         if (success)
         {
             if (gameoverObj != null)
@@ -22,6 +24,7 @@ public class Extract : MonoBehaviour
                 successObj.SetActive(true);
                 failObj.SetActive(false);
             }
+            saveManager.Save();
         }
         else
         {
@@ -31,9 +34,8 @@ public class Extract : MonoBehaviour
                 failObj.SetActive(true);
                 successObj.SetActive(false);
             }
+            saveManager.GameFail();
         }
-        
-        Time.timeScale = 0f;
 
         if (quitBtn != null)
         {
