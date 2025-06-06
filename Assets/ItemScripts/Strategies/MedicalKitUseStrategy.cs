@@ -9,13 +9,13 @@ public class MedicalKitUseStrategy : IUseStrategy
         {
             if (player.currentHp < player.maxHp)
             {
-                // 启动协程，等待 useTime 秒后使用医疗包
+                medicalKit.UseAnimation();
                 player.StartCoroutine(UseMedicalKitCoroutine(player, medicalKit));
                 return true;
             }
             else
             {
-                Debug.Log("Player health is already full.");
+                MessagePopup.Show("Player health is already full.");
                 return false;
             }
         }

@@ -301,13 +301,14 @@ public class SaveLoadManager: MonoBehaviour
             size = medicalKit.size,
             spriteName = medicalKit.sprite != null ? GetSpriteResourcePath(medicalKit) : null,
             id = medicalKit.id,
+            useTime = medicalKit.useTime,
             hp = medicalKit.hp
         };
     }
     
     public void FromMedicalKitData(MedicalKit medicalKit, MedicalKitData medicalKitData)
     {
-        FromItemData(medicalKit, medicalKitData);
+        FromConsumableData(medicalKit, medicalKitData);
         medicalKit.hp = medicalKitData.hp;
     }
     
@@ -398,6 +399,7 @@ public class SaveLoadManager: MonoBehaviour
             size = drink.size,
             spriteName = drink.sprite != null ? GetSpriteResourcePath(drink) : null,
             id = drink.id,
+            useTime = drink.useTime,
             water = drink.water
         };
     }
@@ -418,6 +420,7 @@ public class SaveLoadManager: MonoBehaviour
             size = food.size,
             spriteName = food.sprite != null ? GetSpriteResourcePath(food) : null,
             id = food.id,
+            useTime = food.useTime,
             repletion = food.repletion
         };
     }

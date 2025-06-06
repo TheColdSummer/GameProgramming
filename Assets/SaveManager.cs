@@ -173,8 +173,14 @@ public class SaveManager : MonoBehaviour
         ItemData loadedWeapon = _saveLoadManager.LoadItem();
         if (loadedWeapon != null)
         {
+            GameObject w = _saveLoadManager.ConstructGameObjectFromItemData(loadedWeapon);
             weapon.GetComponent<EquipmentInInventory>()
-                .ChangeEquipment(_saveLoadManager.ConstructGameObjectFromItemData(loadedWeapon));
+                .ChangeEquipment(w);
+            GameObject player = GameObject.Find("Player");
+            if (player != null)
+            {
+                player.GetComponent<Player>().ChangeWeapon(w.GetComponent<Weapon>());
+            }
         }
 
         LoadWarehouse();

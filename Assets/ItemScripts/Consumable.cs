@@ -1,25 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class Consumable : Item
 {
     public int useTime;
     protected IUseStrategy UseStrategy;
 
-    // use strategy mode to define how the item is used
-
-    // Start is called before the first frame update
     void Start()
     {
         base.Start();
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
     
     public void Use(Player player)
@@ -33,6 +25,23 @@ public abstract class Consumable : Item
         {
             Debug.Log("Failed to use item: " + itemName);
         }
+    }
+    
+    public void UseAnimation()
+    {
+        Destroy(gameObject.GetComponent<HorizontalLayoutGroup>());
+        GameObject useAnimation = Instantiate(Resources.Load<GameObject>("LoadingAnimation"), gameObject.transform);
+
+        RectTransform rectTransform = useAnimation.GetComponent<RectTransform>();
+        float parentWidth = gameObject.transform.parent.GetComponent<RectTransform>().rect.width;
+        if (rectTransform != null)
+        {
+            Vector2 offsetMax = rectTransform.offsetMax;
+            offsetMax.x = parentWidth;
+            rectTransform.offsetMax = offsetMax;
+        }
+        
+        useAnimation.SetActive(true);
     }
     
     public override string GetSpecificDescription()

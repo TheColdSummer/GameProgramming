@@ -53,7 +53,6 @@ public class Interactable : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Player is nearby");
             _isPlayerNearby = true;
         }
     }
@@ -62,7 +61,6 @@ public class Interactable : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Player left the area");
             _isPlayerNearby = false;
         }
     }

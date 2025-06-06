@@ -9,12 +9,13 @@ public class FoodUseStrategy : IUseStrategy
         {
             if (player.currentRepletion < player.maxRepletion)
             {
+                food.UseAnimation();
                 player.StartCoroutine(UseFoodCoroutine(player, food));
                 return true;
             }
             else
             {
-                Debug.Log("Player repletion is already full.");
+                MessagePopup.Show("Player repletion is already full.");
                 return false;
             }
         }

@@ -14,17 +14,11 @@ public class Weapon : Item
     public int mode; // 0 = single, 1 = auto
     public string ammoType; // Type of ammo this weapon uses
     public int currentAmmo;
-    // Start is called before the first frame update
+
     void Start()
     {
         base.Start();
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
     
     public override string GetSpecificDescription()

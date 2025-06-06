@@ -25,7 +25,6 @@ public class PlayerSpawner : MonoBehaviour
             spawnPoints.RemoveAt(randomIndex);
             for (int i = 0; i < 3; i++)
             {
-                Debug.Log("Extracting spawn point: " + i);
                 int extractionIndex = Random.Range(0, spawnPoints.Count);
                 GameObject ep = Resources.Load<GameObject>("ExtractionPoint");
                 Vector3 p = new Vector3(spawnPoints[i].position.x, spawnPoints[i].position.y, ep.transform.position.z);

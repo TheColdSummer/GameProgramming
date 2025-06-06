@@ -12,7 +12,7 @@ public class AlertState : IState
     private Animator _animator;
     private Pathfinding _pathfinding;
     private int _currentNodeIndex;
-    private float _moveSpeed = 10f;
+    private float _moveSpeed = 20f;
     private bool _pathReady = false;
 
     public AlertState(FSM fsm)

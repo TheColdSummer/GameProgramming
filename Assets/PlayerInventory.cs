@@ -24,7 +24,7 @@ public class PlayerInventory : MonoBehaviour
         int remainingSize = GetRemainingSizeOfInventory();
         if (remainingSize < item.GetComponent<Item>().size)
         {
-            Debug.LogWarning("Not enough space in inventory to add: " + item.name);
+            MessagePopup.Show("Not enough space in inventory to add: " + item.GetComponent<Item>().itemName);
             return false;
         }
         if (CheckIfItemInInventory(item))
@@ -137,7 +137,7 @@ public class PlayerInventory : MonoBehaviour
                             int newSize = helmetScript.equipment.size;
                             if (remainingSize + equipment.size - newSize < 0)
                             {
-                                Debug.LogWarning("Not enough space in inventory to equip: " + equipment.name);
+                                MessagePopup.Show("Not enough space in inventory to equip: " + equipment.itemName);
                                 return;
                             }
                         }
@@ -168,7 +168,7 @@ public class PlayerInventory : MonoBehaviour
                             int newSize = armorScript.equipment.size;
                             if (remainingSize + equipment.size - newSize < 0)
                             {
-                                Debug.LogWarning("Not enough space in inventory to equip: " + equipment.name);
+                                MessagePopup.Show("Not enough space in inventory to equip: " + equipment.itemName);
                                 return;
                             }
                         }
@@ -199,7 +199,7 @@ public class PlayerInventory : MonoBehaviour
                             int newSize = weaponScript.equipment.size;
                             if (remainingSize + equipment.size - newSize < 0)
                             {
-                                Debug.LogWarning("Not enough space in inventory to equip: " + equipment.name);
+                                MessagePopup.Show("Not enough space in inventory to equip: " + equipment.itemName);
                                 return;
                             }
                         }
@@ -228,9 +228,9 @@ public class PlayerInventory : MonoBehaviour
                         if (chestRigScript.equipment != null)
                         {
                             int newSize = chestRigScript.equipment? chestRigScript.equipment.size : 0;
-                            if (remainingSize + equipment.size - newSize + (chestRigScript.equipment as ChestRig).innerSize - (equipment as ChestRig).innerSize  < 0)
+                            if (remainingSize + equipment.size - newSize - (chestRigScript.equipment as ChestRig).innerSize + (equipment as ChestRig).innerSize  < 0)
                             {
-                                Debug.LogWarning("Not enough space in inventory to equip: " + equipment.name);
+                                MessagePopup.Show("Not enough space in inventory to equip: " + equipment.itemName);
                                 return;
                             }
                         }
@@ -253,9 +253,9 @@ public class PlayerInventory : MonoBehaviour
                     if (backpackScript != null)
                     {
                         int newSize = backpackScript.equipment? backpackScript.equipment.size : 0;
-                        if (remainingSize + equipment.size - newSize + (backpackScript.equipment as Backpack).innerSize - (equipment as Backpack).innerSize < 0)
+                        if (remainingSize + equipment.size - newSize - (backpackScript.equipment as Backpack).innerSize + (equipment as Backpack).innerSize < 0)
                         {
-                            Debug.LogWarning("Not enough space in inventory to equip: " + equipment.name);
+                            MessagePopup.Show("Not enough space in inventory to equip: " + equipment.itemName);
                             return;
                         }
                         ret = backpackScript.ChangeEquipment(equipmentObject);
@@ -370,7 +370,7 @@ public class PlayerInventory : MonoBehaviour
                         }
                         if (remainingSize - oldInnerSize + newInnerSize < 0)
                         {
-                            Debug.LogWarning("Not enough space in inventory to equip: " + equipment.name);
+                            MessagePopup.Show("Not enough space in inventory to equip: " + equipment.itemName);
                             return;
                         }
                         ret = chestRigScript.ChangeEquipment(equipmentObject);
@@ -400,7 +400,7 @@ public class PlayerInventory : MonoBehaviour
                         }
                         if (remainingSize - oldInnerSize + newInnerSize < 0)
                         {
-                            Debug.LogWarning("Not enough space in inventory to equip: " + equipment.name);
+                            MessagePopup.Show("Not enough space in inventory to equip: " + equipment.itemName);
                             return;
                         }
                         ret = backpackScript.ChangeEquipment(equipmentObject);
@@ -479,7 +479,7 @@ public class PlayerInventory : MonoBehaviour
         
         if (remainingSize - innerSize < 0)
         {
-            Debug.LogWarning("Not enough space in inventory to drop: " + equipped.itemName);
+            MessagePopup.Show("Not enough space in inventory to drop: " + equipped.itemName);
             return;
         }
 
@@ -519,7 +519,7 @@ public class PlayerInventory : MonoBehaviour
 
         if (remainingSize - innerSize - equipped.size < 0)
         {
-            Debug.LogWarning("Not enough space in inventory to unequip: " + equipped.itemName);
+            MessagePopup.Show("Not enough space in inventory to drop: " + equipped.itemName);
             return;
         }
 

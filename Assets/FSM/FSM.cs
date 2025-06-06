@@ -50,7 +50,7 @@ public class FSM : MonoBehaviour
                 return state.Key;
             }
         }
-        throw new Exception("State not found");
+        return StateType.Idle;
     }
     
     public void TransitionToState(StateType state)

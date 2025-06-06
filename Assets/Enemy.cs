@@ -20,6 +20,9 @@ public class Enemy : MonoBehaviour
     public GameObject question;
     public GameObject exclaimRed;
     public GameObject exclaimYellow;
+    private static GameObject _player;
+    private float _visualRadius;
+    private float _attackRadius;
     private GameObject _idleRange;
     private FSM _fsm;
 
@@ -32,6 +35,25 @@ public class Enemy : MonoBehaviour
 
     private void InitEnemy()
     {
+        if (_player == null)
+        {
+            _player = GameObject.Find("Player");
+            if (_player == null)
+            {
+                Debug.LogError("Player object not found in the scene.");
+            }
+        }
+
+        if (visualRange != null)
+        {
+            _visualRadius = visualRange.GetComponent<CircleCollider2D>().radius * visualRange.transform.lossyScale.x;
+        }
+
+        if (attackRange != null)
+        {
+            _attackRadius = attackRange.GetComponent<CircleCollider2D>().radius * attackRange.transform.lossyScale.x;
+        }
+
         int p = Random.Range(0, 100);
         int level;
         if (p < 50)
@@ -205,9 +227,17 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (_player == null || visualRange == null || _fsm == null)
+            return;
+
+        float dist = Vector2.Distance(transform.position, _player.transform.position);
+
+        if (dist > _visualRadius && _fsm.CurrentState() != StateType.Idle && _fsm.CurrentState() != StateType.Alert)
+        {
+            _fsm.TransitionToState(StateType.Idle);
+        }
     }
 
     public void CauseHeadDamage(int bulletArmorDamage, int bulletBodyDamage)
@@ -283,6 +313,11 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject.GetComponent<HitDetector>());
         Destroy(gameObject.GetComponent<Rigidbody2D>());
         Destroy(gameObject.GetComponent<BoxCollider2D>());
+        Destroy(visualRange);
+        Destroy(footStepRange);
+        Destroy(gunFireRange);
+        Destroy(attackRange);
+        Destroy(_idleRange);
 
         FSM fsm = gameObject.GetComponent<FSM>();
         fsm.TransitionToState(StateType.Die);
@@ -326,6 +361,8 @@ public class Enemy : MonoBehaviour
         }
 
         containerScript.AddItems(items);
+        
+        Destroy(this);
     }
 
     public void SetIdleRange(GameObject idleRangeObject)
@@ -369,10 +406,8 @@ public class Enemy : MonoBehaviour
                 return;
             }
 
-            float visualRadius = visualRange.GetComponent<CircleCollider2D>().radius *
-                                 visualRange.transform.lossyScale.x;
             float vDist = Vector2.Distance(enemyPos, playerPos);
-            if (vDist > visualRadius)
+            if (vDist > _visualRadius)
             {
                 return;
             }
@@ -383,17 +418,15 @@ public class Enemy : MonoBehaviour
                 StateType currentState = _fsm.CurrentState();
                 if (attackRange != null)
                 {
-                    CircleCollider2D attackCollider = attackRange.GetComponent<CircleCollider2D>();
-                    float attackRadius = attackCollider.radius * attackRange.transform.lossyScale.x;
                     float dist = Vector2.Distance(enemyPos, playerPos);
 
-                    if (dist <= attackRadius &&
+                    if (dist <= _attackRadius &&
                         (currentState == StateType.Idle || currentState == StateType.Alert ||
                          currentState == StateType.Chase))
                     {
                         _fsm.TransitionToState(StateType.Attack);
                     }
-                    else if (dist > attackRadius &&
+                    else if (dist > _attackRadius * 1.8f &&
                              (currentState == StateType.Idle || currentState == StateType.Alert ||
                               currentState == StateType.Attack))
                     {
@@ -411,16 +444,6 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.CompareTag("Player") && _fsm.CurrentState() != StateType.Idle &&
-            _fsm.CurrentState() != StateType.Alert && visualRange != null &&
-            other == visualRange.GetComponent<Collider2D>())
-        {
-            _fsm.TransitionToState(StateType.Idle);
-        }
-    }
-
     public void NoQuestion()
     {
         question.SetActive(false);
@@ -434,14 +457,14 @@ public class Enemy : MonoBehaviour
         exclaimRed.SetActive(false);
         exclaimYellow.SetActive(false);
     }
-    
+
     public void ExclaimRed()
     {
         question.SetActive(false);
         exclaimRed.SetActive(true);
         exclaimYellow.SetActive(false);
     }
-    
+
     public void ExclaimYellow()
     {
         question.SetActive(false);

@@ -102,7 +102,7 @@ public class Player : MonoBehaviour
         getAmmo -= requiredAmmo;
         if (getAmmo <= 0)
         {
-            Debug.LogWarning("No ammo available for reloading.");
+            MessagePopup.Show("No ammo available for reloading.");
             _isReloading = false;
             weaponControl.SetReloading(false);
             return;

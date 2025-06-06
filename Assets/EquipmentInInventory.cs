@@ -39,7 +39,7 @@ public class EquipmentInInventory : MonoBehaviour
         {
             if (item.type != type)
             {
-                Debug.Log("Cannot equip item: " + item.name + " to position: " + type);
+                Debug.LogError("Cannot equip item: " + item.name + " to position: " + type);
                 return null;
             }
             GameObject ret = _correspondingItemObject;
@@ -47,7 +47,6 @@ public class EquipmentInInventory : MonoBehaviour
             newEquipment.transform.SetParent(transform, false);
             equipment = _correspondingItemObject.GetComponent<Item>();
             newEquipment.SetActive(false);
-            Debug.Log("Equipped item: " + item.name + " to position: " + type);
             Component image = GetComponentInChildren<UnityEngine.UI.Image>();
             if (image != null)
             {

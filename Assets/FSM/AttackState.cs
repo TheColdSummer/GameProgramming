@@ -70,7 +70,7 @@ public class AttackState : IState
             if (_fireTimer >= _fireCooldown)
             {
                 _isFiring = true;
-                _fireDuration = Random.Range(0.1f, 0.3f);
+                _fireDuration = Random.Range(0.2f, 0.5f);
                 _fireTimer = 0f;
             }
         }
@@ -78,6 +78,6 @@ public class AttackState : IState
 
     private void ResetFireCooldown()
     {
-        _fireCooldown = Random.Range(0.7f, 3.2f);
+        _fireCooldown = Random.Range(0.3f, 2f);
     }
 }

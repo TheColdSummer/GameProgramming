@@ -97,7 +97,6 @@ public class EnemyWeaponControl : MonoBehaviour
             {
                 Debug.LogWarning("SpriteRenderer component not found on the weapon object.");
             }
-            Debug.Log("Weapon changed to: " + _curWeapon);
         }
     }
 

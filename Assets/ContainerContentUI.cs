@@ -4,18 +4,7 @@ using UnityEngine;
 
 public class ContainerContentUI : MonoBehaviour
 {
-    private Transform connectedContainer;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    private Transform _connectedContainer;
 
     public void ConnectTo(Transform container)
     {
@@ -25,7 +14,7 @@ public class ContainerContentUI : MonoBehaviour
             return;
         }
         
-        connectedContainer = container;
+        _connectedContainer = container;
     }
 
     public void ReturnItemsToContainer()
@@ -35,7 +24,7 @@ public class ContainerContentUI : MonoBehaviour
             return;
         }
         
-        if (connectedContainer == null)
+        if (_connectedContainer == null)
         {
             Debug.LogError("No connected container to return items to, destroy them.");
             foreach (Transform child in transform)
@@ -53,12 +42,11 @@ public class ContainerContentUI : MonoBehaviour
         foreach (Transform child in children)
         {
             GameObject item = child.gameObject;
-            item.transform.SetParent(connectedContainer.transform, false);
+            item.transform.SetParent(_connectedContainer.transform, false);
             item.SetActive(true);
         }
 
-        Debug.Log("Items returned to container: " + connectedContainer.name);
-        connectedContainer = null;
+        _connectedContainer = null;
     }
 
     public void ReceiveItemFromPlayer(GameObject item)

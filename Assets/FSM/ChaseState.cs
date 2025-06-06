@@ -12,7 +12,7 @@ public class ChaseState : IState
     private Animator _animator;
     private Pathfinding _pathfinding;
     private int _currentNodeIndex;
-    private float _moveSpeed = 13f;
+    private float _moveSpeed = 25f;
     private bool _pathReady = false;
     private float _timer = 0f;
     private float _updateInterval = 3f;

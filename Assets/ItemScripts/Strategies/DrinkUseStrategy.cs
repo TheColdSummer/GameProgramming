@@ -9,12 +9,13 @@ public class DrinkUseStrategy : IUseStrategy
         {
             if (player.currentHydration < player.maxHydration)
             {
+                drink.UseAnimation();
                 player.StartCoroutine(UseDrinkCoroutine(player, drink));
                 return true;
             }
             else
             {
-                Debug.Log("Player hydration is already full.");
+                MessagePopup.Show("Player hydration is already full.");
                 return false;
             }
         }
@@ -28,7 +29,7 @@ public class DrinkUseStrategy : IUseStrategy
     private IEnumerator UseDrinkCoroutine(Player player, Drink drink)
     {
         yield return new WaitForSeconds(drink.useTime);
-        player.ChangeRepletionDelta(drink.water);
+        player.ChangeHydrationDelta(drink.water);
         GameObject.Destroy(drink.gameObject);
     }
 }

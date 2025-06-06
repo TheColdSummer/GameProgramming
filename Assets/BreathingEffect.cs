@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BreathingEffect : MonoBehaviour
 {
-    private bool _isPlayerNearby = false;
     private SpriteRenderer _spriteRenderer;
     private Coroutine _breathingCoroutine;
 
@@ -18,7 +17,6 @@ public class BreathingEffect : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            _isPlayerNearby = true;
             if (_breathingCoroutine == null)
             {
                 _breathingCoroutine = StartCoroutine(Breathing());
@@ -30,7 +28,6 @@ public class BreathingEffect : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            _isPlayerNearby = false;
             if (_breathingCoroutine != null)
             {
                 StopCoroutine(_breathingCoroutine);
