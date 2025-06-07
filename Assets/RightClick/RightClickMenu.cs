@@ -78,7 +78,6 @@ public class RightClickMenu : MonoBehaviour
             Item item = clickedGameObject.GetComponent<EquipmentInInventory>().equipment;
             if (item == null)
             {
-                Debug.LogError("EquipmentInInventory script found, but no equipment assigned.");
                 return false;
             }
             AddMenuItem("Description", () => ShowDescription(item));

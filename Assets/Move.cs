@@ -9,6 +9,7 @@ public class Move : MonoBehaviour
     public int endurance;
     public int maxEndurance;
     public GameObject playerInventoryUI;
+    public Bar enduranceBar;
     private Rigidbody2D playerRigidbody2D;
     private Animator animator;
 
@@ -21,6 +22,14 @@ public class Move : MonoBehaviour
         animator = GetComponent<Animator>();
         animator.SetBool("left_move", false);
         animator.SetBool("right_move", false);
+        if (enduranceBar != null)
+        {
+            enduranceBar.SetValue(endurance, maxEndurance);
+        }
+        else
+        {
+            Debug.LogError("Endurance bar not assigned in Move script.");
+        }
     }
 
     void Update()
@@ -48,6 +57,7 @@ public class Move : MonoBehaviour
             if (enduranceTimer >= 0.5f)
             {
                 endurance -= 1;
+                enduranceBar.UpdateValueDelta(-1);
                 endurance = Mathf.Max(endurance, 0);
                 enduranceTimer = 0f;
             }
@@ -57,6 +67,7 @@ public class Move : MonoBehaviour
             if (endurance < maxEndurance && enduranceTimer >= 1f)
             {
                 endurance += 1;
+                enduranceBar.UpdateValueDelta(1);
                 endurance = Mathf.Min(endurance, maxEndurance);
                 enduranceTimer = 0f;
             }

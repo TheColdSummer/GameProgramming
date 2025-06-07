@@ -571,7 +571,7 @@ MonoBehaviour:
   type: Backpack
   price: 20000
   size: 4
-  sprite: {fileID: 21300000, guid: c2d2a319f12cdb646b9228ba3336e052, type: 3}
+  sprite: {fileID: 21300000, guid: 5fb4749c59ce4a5409d3a3bc821eab04, type: 3}
   id: 23
   innerSize: 45
 --- !u!1 &8723170298966027482

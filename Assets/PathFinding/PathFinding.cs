@@ -28,6 +28,15 @@ public class Pathfinding : MonoBehaviour
     {
         Node startNode = _grid.NodeFromWorldPoint(startPos);
         Node targetNode = _grid.NodeFromWorldPoint(targetPos);
+        bool tmp = startNode.walkable;
+        if (!tmp)
+        {
+            startNode.walkable = true;
+        }
+        if (!targetNode.walkable)
+        {
+            targetNode = AdjustToWalkableNeighbour(targetNode, targetPos);
+        }
 
         List<Node> openSet = new List<Node>();
         HashSet<Node> closedSet = new HashSet<Node>();
@@ -48,6 +57,7 @@ public class Pathfinding : MonoBehaviour
 
             if (currentNode == targetNode)
             {
+                startNode.walkable = tmp;
                 return RetracePath(startNode, targetNode);
             }
 
@@ -69,7 +79,55 @@ public class Pathfinding : MonoBehaviour
             }
         }
 
+        startNode.walkable = tmp;
         return null;
+    }
+
+    private Node AdjustToWalkableNeighbour(Node targetNode, Vector2 targetPos)
+    {
+        List<Node> candidates = new List<Node>();
+        HashSet<Node> visited = new HashSet<Node>();
+        int[] dx = { -2, -1, 0, 1, 2 };
+        int[] dy = { -2, -1, 0, 1, 2 };
+
+        for (int i = 0; i < dx.Length; i++)
+        {
+            for (int j = 0; j < dy.Length; j++)
+            {
+                if (dx[i] == 0 && dy[j] == 0) continue;
+                int nx = targetNode.gridX + dx[i];
+                int ny = targetNode.gridY + dy[j];
+                int manhattan = Mathf.Abs(dx[i]) + Mathf.Abs(dy[j]);
+                if (manhattan > 2 || manhattan == 0) continue;
+                if (nx < 0 || ny < 0 || nx >= _grid.gridWorldSize.x / (_grid.nodeRadius * 2) || ny >= _grid.gridWorldSize.y / (_grid.nodeRadius * 2))
+                    continue;
+                Node node = _grid.NodeFromWorldPoint(new Vector2(
+                    _grid.transform.position.x - _grid.gridWorldSize.x / 2 + nx * _grid.nodeRadius * 2 + _grid.nodeRadius,
+                    _grid.transform.position.y - _grid.gridWorldSize.y / 2 + ny * _grid.nodeRadius * 2 + _grid.nodeRadius
+                ));
+                if (!visited.Contains(node))
+                {
+                    candidates.Add(node);
+                    visited.Add(node);
+                }
+            }
+        }
+
+        Node closest = null;
+        float minDist = float.MaxValue;
+        foreach (var node in candidates)
+        {
+            if (!node.walkable) continue;
+            RaycastHit2D hit = Physics2D.Linecast(targetPos, node.worldPosition, LayerMask.GetMask("Wall"));
+            if (hit.collider != null && hit.collider.CompareTag("Wall")) continue;
+            float dist = Vector2.Distance(targetPos, node.worldPosition);
+            if (dist < minDist)
+            {
+                minDist = dist;
+                closest = node;
+            }
+        }
+        return closest;
     }
 
     List<Node> RetracePath(Node startNode, Node endNode)

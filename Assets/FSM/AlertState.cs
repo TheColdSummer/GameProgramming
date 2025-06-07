@@ -12,7 +12,7 @@ public class AlertState : IState
     private Animator _animator;
     private Pathfinding _pathfinding;
     private int _currentNodeIndex;
-    private float _moveSpeed = 20f;
+    private float _moveSpeed = 13f;
     private bool _pathReady = false;
 
     public AlertState(FSM fsm)
@@ -33,8 +33,8 @@ public class AlertState : IState
         if (_player != null)
         {
             _pathfinding.FindPathAsyncThreaded(
-                _enemy.transform.position,
-                _player.transform.position,
+                _enemy.GetComponent<CapsuleCollider2D>().bounds.center,
+                _player.GetComponent<CapsuleCollider2D>().bounds.center,
                 (path) =>
                 {
                     _pathToPlayer = path;

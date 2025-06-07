@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,12 @@ public class Bullet : MonoBehaviour
     private float _speed;
     public int armorDamage;
     public int bodyDamage;
+    private Vector2 _lastPosition;
+
+    private void Start()
+    {
+        _lastPosition = transform.position;
+    }
 
     public void Init(Vector2 direction, float speed, int armorDmg, int bodyDmg)
     {
@@ -17,13 +24,48 @@ public class Bullet : MonoBehaviour
         bodyDamage = bodyDmg;
         float angle = Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle - 90);
-        
+
         Destroy(gameObject, 2f);
     }
 
     void Update()
     {
+        Vector2 currentPosition = transform.position;
+
+        RaycastHit2D[] hits = Physics2D.LinecastAll(_lastPosition, currentPosition, LayerMask.GetMask("Character", "Enemy"));
+        foreach (var hit in hits)
+        {
+            if (hit.collider == null) continue;
+            if (hit.collider.CompareTag("Player") && CompareTag("EnemyBullet"))
+            {
+                if (hit.collider.name == "Head" || hit.collider.name == "Body")
+                {
+                    HitDetector detector = hit.collider.transform.root.GetComponent<HitDetector>();
+                    if (detector != null)
+                    {
+                        detector.HitCompensation(this, hit.collider.name, "Player");
+                        Destroy(gameObject);
+                        return;
+                    }
+                }
+            }
+            else if (hit.collider.CompareTag("Enemy") && CompareTag("Bullet"))
+            {
+                if (hit.collider.name == "Head" || hit.collider.name == "Body")
+                {
+                    HitDetector detector = hit.collider.transform.parent.GetComponent<HitDetector>();
+                    if (detector != null)
+                    {
+                        detector.HitCompensation(this, hit.collider.name, "Enemy");
+                        Destroy(gameObject);
+                        return;
+                    }
+                }
+            }
+        }
+
         transform.Translate(_direction * _speed * Time.deltaTime, Space.World);
+        _lastPosition = currentPosition;
     }
 
     void OnTriggerEnter2D(Collider2D other)

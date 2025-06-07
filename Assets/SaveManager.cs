@@ -13,7 +13,7 @@ public class SaveManager : MonoBehaviour
     public GameObject armor;
     public GameObject weapon;
     public GameObject warehouse;
-    
+
     private string _backpackFilePath;
     private string _chestRigFilePath;
     private string _backpackItemsFilePath;
@@ -23,7 +23,7 @@ public class SaveManager : MonoBehaviour
     private string _warehouseFilePath;
     private string _cashFilePath;
     private SaveLoadManager _saveLoadManager;
-    
+
     void OnEnable()
     {
         _backpackFilePath = Application.persistentDataPath + "/backpack.json";
@@ -36,7 +36,7 @@ public class SaveManager : MonoBehaviour
         _cashFilePath = Application.persistentDataPath + "/cash.json";
         _saveLoadManager = new SaveLoadManager();
     }
-    
+
     public void Save()
     {
         _saveLoadManager.SetPath(_backpackFilePath);
@@ -46,7 +46,7 @@ public class SaveManager : MonoBehaviour
         {
             _saveLoadManager.SaveItem(equippedBackpack);
         }
-        
+
         _saveLoadManager.SetPath(_chestRigFilePath);
         _saveLoadManager.ClearSaveData();
         Item equippedChestRig = chestRig.GetComponent<EquipmentInInventory>().equipment;
@@ -54,7 +54,7 @@ public class SaveManager : MonoBehaviour
         {
             _saveLoadManager.SaveItem(equippedChestRig);
         }
-        
+
         _saveLoadManager.SetPath(_backpackItemsFilePath);
         _saveLoadManager.ClearSaveData();
         List<Item> items = new List<Item>();
@@ -66,8 +66,9 @@ public class SaveManager : MonoBehaviour
                 items.Add(backpackItem);
             }
         }
+
         _saveLoadManager.SaveItems(items);
-        
+
         _saveLoadManager.SetPath(_helmetFilePath);
         _saveLoadManager.ClearSaveData();
         Item equippedHelmet = helmet.GetComponent<EquipmentInInventory>().equipment;
@@ -75,7 +76,7 @@ public class SaveManager : MonoBehaviour
         {
             _saveLoadManager.SaveItem(equippedHelmet);
         }
-        
+
         _saveLoadManager.SetPath(_armorFilePath);
         _saveLoadManager.ClearSaveData();
         Item equippedArmor = armor.GetComponent<EquipmentInInventory>().equipment;
@@ -83,7 +84,7 @@ public class SaveManager : MonoBehaviour
         {
             _saveLoadManager.SaveItem(equippedArmor);
         }
-        
+
         _saveLoadManager.SetPath(_weaponFilePath);
         _saveLoadManager.ClearSaveData();
         Item equippedWeapon = weapon.GetComponent<EquipmentInInventory>().equipment;
@@ -91,7 +92,7 @@ public class SaveManager : MonoBehaviour
         {
             _saveLoadManager.SaveItem(equippedWeapon);
         }
-        
+
         SaveWarehouse();
     }
 
@@ -110,6 +111,7 @@ public class SaveManager : MonoBehaviour
                     warehouseItems.Add(warehouseItem);
                 }
             }
+
             _saveLoadManager.SaveItems(warehouseItems);
             _saveLoadManager.SetPath(_cashFilePath);
             _saveLoadManager.ClearSaveData();
@@ -127,7 +129,7 @@ public class SaveManager : MonoBehaviour
             backpack.GetComponent<EquipmentInInventory>()
                 .ChangeEquipment(_saveLoadManager.ConstructGameObjectFromItemData(loadedBackpack));
         }
-        
+
         _saveLoadManager.SetPath(_chestRigFilePath);
         ItemData loadedChestRig = _saveLoadManager.LoadItem();
         if (loadedChestRig != null)
@@ -135,7 +137,7 @@ public class SaveManager : MonoBehaviour
             chestRig.GetComponent<EquipmentInInventory>()
                 .ChangeEquipment(_saveLoadManager.ConstructGameObjectFromItemData(loadedChestRig));
         }
-        
+
         _saveLoadManager.SetPath(_backpackItemsFilePath);
         List<ItemData> loadedBackpackItems = _saveLoadManager.LoadItems();
         if (loadedBackpackItems != null)
@@ -146,13 +148,14 @@ public class SaveManager : MonoBehaviour
                 itemObject.transform.SetParent(backpackItems.transform, false);
                 itemObject.SetActive(true);
             }
-            GameObject playerInventory = GameObject.Find("Canvas/InventoryWithContainer/PlayerInventory");
-            if (playerInventory != null)
-            {
-                playerInventory.GetComponent<PlayerInventory>().RefreshRemainingSpace();
-            }
         }
-        
+
+        GameObject playerInventory = GameObject.Find("Canvas/InventoryWithContainer/PlayerInventory");
+        if (playerInventory != null)
+        {
+            playerInventory.GetComponent<PlayerInventory>().RefreshRemainingSpace();
+        }
+
         _saveLoadManager.SetPath(_helmetFilePath);
         ItemData loadedHelmet = _saveLoadManager.LoadItem();
         if (loadedHelmet != null)
@@ -160,7 +163,7 @@ public class SaveManager : MonoBehaviour
             helmet.GetComponent<EquipmentInInventory>()
                 .ChangeEquipment(_saveLoadManager.ConstructGameObjectFromItemData(loadedHelmet));
         }
-        
+
         _saveLoadManager.SetPath(_armorFilePath);
         ItemData loadedArmor = _saveLoadManager.LoadItem();
         if (loadedArmor != null)
@@ -168,7 +171,7 @@ public class SaveManager : MonoBehaviour
             armor.GetComponent<EquipmentInInventory>()
                 .ChangeEquipment(_saveLoadManager.ConstructGameObjectFromItemData(loadedArmor));
         }
-        
+
         _saveLoadManager.SetPath(_weaponFilePath);
         ItemData loadedWeapon = _saveLoadManager.LoadItem();
         if (loadedWeapon != null)
@@ -201,6 +204,7 @@ public class SaveManager : MonoBehaviour
                     itemObject.SetActive(true);
                 }
             }
+
             _saveLoadManager.SetPath(_cashFilePath);
             int loadedCash = _saveLoadManager.LoadInt();
             if (loadedCash >= 0)

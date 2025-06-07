@@ -12,7 +12,7 @@ public class ChaseState : IState
     private Animator _animator;
     private Pathfinding _pathfinding;
     private int _currentNodeIndex;
-    private float _moveSpeed = 25f;
+    private float _moveSpeed = 18f;
     private bool _pathReady = false;
     private float _timer = 0f;
     private float _updateInterval = 3f;
@@ -106,8 +106,8 @@ public class ChaseState : IState
         if (_player != null)
         {
             _pathfinding.FindPathAsyncThreaded(
-                _enemy.transform.position,
-                _player.transform.position,
+                _enemy.GetComponent<CapsuleCollider2D>().bounds.center,
+                _player.GetComponent<CapsuleCollider2D>().bounds.center,
                 (path) =>
                 {
                     _pathToPlayer = path;

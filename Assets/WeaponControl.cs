@@ -16,15 +16,16 @@ public class WeaponControl : MonoBehaviour
     public TextMeshProUGUI weaponCurAmmo;
     public TextMeshProUGUI weaponMaxAmmo;
     public GameObject playerInventoryUI;
+    public AudioSource audioSource;
+    public AudioClip autoFireClip;
+    public AudioClip singleFireClip;
+    public AudioClip boltActionClip;
+    public AudioClip emptyMagClip;
+    public AudioClip reloadClip;
     private Weapon _curWeapon;
     private float _lastFireTime = -1f;
     private bool _reloading;
 
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
     void Update()
     {
         Vector2 mousePosition = Input.mousePosition;
@@ -61,7 +62,6 @@ public class WeaponControl : MonoBehaviour
                 if (Input.GetMouseButtonDown(0) && Time.time - _lastFireTime >= (float)60 / _curWeapon.RPM)
                 {
                     Fire();
-                    _lastFireTime = Time.time;
                 }
             }
             else if (_curWeapon.mode == 1)
@@ -69,7 +69,6 @@ public class WeaponControl : MonoBehaviour
                 if (Input.GetMouseButton(0) && Time.time - _lastFireTime >= (float)60 / _curWeapon.RPM)
                 {
                     Fire();
-                    _lastFireTime = Time.time;
                 }
             }
         }
@@ -81,6 +80,10 @@ public class WeaponControl : MonoBehaviour
         if (_curWeapon.currentAmmo <= 0)
         {
             // need reload
+            if (Input.GetMouseButtonDown(0) && audioSource != null && emptyMagClip != null)
+            {
+                audioSource.PlayOneShot(emptyMagClip);
+            }
             return;
         }
         Vector2 direction = (directionPoint.position - firePoint.position).normalized;
@@ -90,7 +93,38 @@ public class WeaponControl : MonoBehaviour
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
         Bullet bulletScript = bullet.GetComponent<Bullet>();
         bulletScript.Init(direction, 100, _curWeapon.ArmorDmg, _curWeapon.bodyDmg);
+        _lastFireTime = Time.time;
+        
+        if (_curWeapon.mode == 1)
+        {
+            if (autoFireClip != null && audioSource != null)
+                audioSource.PlayOneShot(autoFireClip);
+        }
+        else if (_curWeapon.mode == 0)
+        {
+            if (singleFireClip != null && audioSource != null)
+                audioSource.PlayOneShot(singleFireClip);
+        }
+
+        if (_curWeapon.itemName == "AWM" && boltActionClip != null && audioSource != null)
+        {
+            float delay = 0f;
+            if (_curWeapon.mode == 1 && autoFireClip != null)
+                delay = autoFireClip.length;
+            else if (_curWeapon.mode == 0 && singleFireClip != null)
+                delay = singleFireClip.length;
+
+            StartCoroutine(PlayBoltActionAfterDelay(delay));
+        }
+        
         WeaponFired();
+    }
+    
+    private IEnumerator PlayBoltActionAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (boltActionClip != null && audioSource != null)
+            audioSource.PlayOneShot(boltActionClip);
     }
 
     public void ChangeWeapon(Weapon weapon)
@@ -109,7 +143,7 @@ public class WeaponControl : MonoBehaviour
             }
             return;
         }
-        if (!_curWeapon || _curWeapon.itemName != weapon.itemName)
+        if (!_curWeapon || _curWeapon != weapon)
         {
             _curWeapon = weapon;
             if (spriteRenderer != null)
@@ -180,5 +214,13 @@ public class WeaponControl : MonoBehaviour
     public float GetLastFireTime()
     {
         return _lastFireTime;
+    }
+
+    public void PlayReloadAudio()
+    {
+        if (audioSource != null && reloadClip != null)
+        {
+            audioSource.PlayOneShot(reloadClip);
+        }
     }
 }

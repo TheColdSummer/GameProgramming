@@ -636,7 +636,7 @@ MonoBehaviour:
   type: Drink
   price: 150
   size: 1
-  sprite: {fileID: 21300000, guid: 97c61a0a3064f9749b046b7f961d4280, type: 3}
+  sprite: {fileID: 21300000, guid: b7bc06790b155a24cb35943cb773f98c, type: 3}
   id: 42
   useTime: 5
   water: 25

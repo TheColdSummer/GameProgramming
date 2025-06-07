@@ -303,7 +303,7 @@ MonoBehaviour:
   type: Chest Rig
   price: 8500
   size: 4
-  sprite: {fileID: 21300000, guid: a1dcc1fcd76aa6a40b90d69b8fb0506b, type: 3}
+  sprite: {fileID: 21300000, guid: 582dd97ad4b24a24095566bdd33b556d, type: 3}
   id: 28
   innerSize: 22
 --- !u!1 &5135795599563254001

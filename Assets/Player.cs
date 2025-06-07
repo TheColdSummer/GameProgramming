@@ -26,15 +26,24 @@ public class Player : MonoBehaviour
     private bool _isReloading = false;
     private Coroutine _hpLossCoroutine;
 
-    // Start is called before the first frame update
     void Start()
     {
-        armorBar.SetValue(GetCurBodyArmorDurability(), GetMaxBodyArmorDurability());
-        helmetBar.SetValue(GetCurHelmetDurability(), GetMaxHelmetDurability());
+        if (armorBar != null && helmetBar != null && hpBar != null && repletionBar != null && hydrationBar != null)
+        {
+            armorBar.SetValue(GetCurBodyArmorDurability(), GetMaxBodyArmorDurability());
+            helmetBar.SetValue(GetCurHelmetDurability(), GetMaxHelmetDurability());
+            hpBar.SetValue(currentHp, maxHp);
+            repletionBar.SetValue(currentRepletion, maxRepletion);
+            hydrationBar.SetValue(currentHydration, maxHydration);
+        }
+        else
+        {
+            Debug.LogError("One or more bars are not assigned in Player script.");
+        }
+        
         StartCoroutine(DecreaseRepletionAndHydration());
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.R) && !_isReloading)
@@ -116,6 +125,8 @@ public class Player : MonoBehaviour
         {
             reloadUI.SetActive(true);
         }
+        
+        weaponControl.PlayReloadAudio();
         yield return new WaitForSeconds(w.reloadTime);
         weaponControl.ReLoad(getAmmo);
         if (reloadUI != null)

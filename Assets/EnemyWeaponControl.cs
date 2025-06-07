@@ -8,6 +8,10 @@ public class EnemyWeaponControl : MonoBehaviour
     public Transform firePoint;
     public Transform directionPoint;
     public SpriteRenderer spriteRenderer;
+    public AudioSource audioSource;
+    public AudioClip autoFireClip;
+    public AudioClip singleFireClip;
+    public AudioClip boltActionClip;
     private Weapon _curWeapon;
     private float _lastFireTime;
     private bool _fire;
@@ -28,7 +32,6 @@ public class EnemyWeaponControl : MonoBehaviour
                 if (Time.time - _lastFireTime >= (float)60 / _curWeapon.RPM)
                 {
                     Fire();
-                    _lastFireTime = Time.time;
                 }
             }
             else if (_curWeapon.mode == 1)
@@ -36,7 +39,6 @@ public class EnemyWeaponControl : MonoBehaviour
                 if (Time.time - _lastFireTime >= (float)60 / _curWeapon.RPM)
                 {
                     Fire();
-                    _lastFireTime = Time.time;
                 }
             }
         }
@@ -77,8 +79,38 @@ public class EnemyWeaponControl : MonoBehaviour
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
         Bullet bulletScript = bullet.GetComponent<Bullet>();
         bulletScript.Init(direction, 100, _curWeapon.ArmorDmg, _curWeapon.bodyDmg);
+        _lastFireTime = Time.time;
+        
+        if (_curWeapon.mode == 1)
+        {
+            if (autoFireClip != null && audioSource != null)
+                audioSource.PlayOneShot(autoFireClip);
+        }
+        else if (_curWeapon.mode == 0)
+        {
+            if (singleFireClip != null && audioSource != null)
+                audioSource.PlayOneShot(singleFireClip);
+        }
+
+        if (_curWeapon.itemName == "AWM" && boltActionClip != null && audioSource != null)
+        {
+            float delay = 0f;
+            if (_curWeapon.mode == 1 && autoFireClip != null)
+                delay = autoFireClip.length;
+            else if (_curWeapon.mode == 0 && singleFireClip != null)
+                delay = singleFireClip.length;
+
+            StartCoroutine(PlayBoltActionAfterDelay(delay));
+        }
     }
 
+    private IEnumerator PlayBoltActionAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (boltActionClip != null && audioSource != null)
+            audioSource.PlayOneShot(boltActionClip);
+    }
+    
     public void ChangeWeapon(Weapon weapon)
     {
         if (weapon == null)

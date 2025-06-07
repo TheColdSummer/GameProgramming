@@ -35,4 +35,22 @@ public class HitDetector : MonoBehaviour
             }
         }
     }
+
+    public void HitCompensation(Bullet bullet, string colliderName, string target)
+    {
+        if (colliderName == "Head")
+        {
+            if (target == "Enemy")
+                gameObject.GetComponent<Enemy>().CauseHeadDamage(bullet.armorDamage, bullet.bodyDamage);
+            else if (target == "Player")
+                gameObject.GetComponent<Player>().CauseHeadDamage(bullet.armorDamage, bullet.bodyDamage);
+        }
+        else if (colliderName == "Body")
+        {
+            if (target == "Enemy")
+                gameObject.GetComponent<Enemy>().CauseBodyDamage(bullet.armorDamage, bullet.bodyDamage);
+            else if (target == "Player")
+                gameObject.GetComponent<Player>().CauseBodyDamage(bullet.armorDamage, bullet.bodyDamage);
+        }
+    }
 }

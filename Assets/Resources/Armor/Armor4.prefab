@@ -82,7 +82,7 @@ MonoBehaviour:
   type: Armor
   price: 24000
   size: 16
-  sprite: {fileID: 21300000, guid: 6bdb2f6bc66795f46ac445cf669df16a, type: 3}
+  sprite: {fileID: 21300000, guid: a26e3c7d0bd226e48b91e24ca33b3c73, type: 3}
   id: 11
   durability: 210
   maxDurability: 210

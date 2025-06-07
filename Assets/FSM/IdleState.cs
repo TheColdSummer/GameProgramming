@@ -197,7 +197,7 @@ public class IdleState : IState
         if (_pathfinding != null)
         {
             _pathfinding.FindPathAsyncThreaded(
-                _enemy.transform.position,
+                _enemy.GetComponent<CapsuleCollider2D>().bounds.center,
                 center,
                 (path) =>
                 {

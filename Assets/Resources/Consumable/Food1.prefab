@@ -228,7 +228,7 @@ MonoBehaviour:
   type: Food
   price: 200
   size: 1
-  sprite: {fileID: 21300000, guid: 804c48de036e22d41929104c6439aa9b, type: 3}
+  sprite: {fileID: 21300000, guid: 1b660212c189b9944835a6ad006a211b, type: 3}
   id: 38
   useTime: 4
   repletion: 30

@@ -216,7 +216,7 @@ MonoBehaviour:
   type: Helmet
   price: 1500
   size: 4
-  sprite: {fileID: 21300000, guid: 2345bd20ee74444418a4da50e7fa7b43, type: 3}
+  sprite: {fileID: 21300000, guid: de38ae770cbf66148bbf5e736916beeb, type: 3}
   id: 13
   durability: 50
   maxDurability: 50

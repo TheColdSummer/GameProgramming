@@ -228,7 +228,7 @@ MonoBehaviour:
   type: MedicalKit
   price: 6000
   size: 3
-  sprite: {fileID: 21300000, guid: 165b03983aeac8749aa2faf350368ca1, type: 3}
+  sprite: {fileID: 21300000, guid: fc80f944963769443abd83b6582f59ad, type: 3}
   id: 36
   useTime: 4
   hp: 40
