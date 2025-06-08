@@ -796,7 +796,7 @@ GameObject:
   - component: {fileID: 7340776053543967536}
   m_Layer: 11
   m_Name: Head
-  m_TagString: Enemy
+  m_TagString: EnemyBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1046,7 +1046,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 16
+  m_Radius: 18
 --- !u!1 &4547083435831598786
 GameObject:
   m_ObjectHideFlags: 0
@@ -1642,7 +1642,7 @@ GameObject:
   - component: {fileID: 3101069152427114093}
   m_Layer: 11
   m_Name: Body
-  m_TagString: Enemy
+  m_TagString: EnemyBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -16,7 +16,7 @@ public class Bullet : MonoBehaviour
         _lastPosition = transform.position;
     }
 
-    public void Init(Vector2 direction, float speed, int armorDmg, int bodyDmg)
+    public void Init(Vector2 direction, float speed, int armorDmg, int bodyDmg, float flyTime)
     {
         _direction = direction;
         _speed = speed;
@@ -25,7 +25,7 @@ public class Bullet : MonoBehaviour
         float angle = Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle - 90);
 
-        Destroy(gameObject, 2f);
+        Destroy(gameObject, flyTime);
     }
 
     void Update()
@@ -36,7 +36,7 @@ public class Bullet : MonoBehaviour
         foreach (var hit in hits)
         {
             if (hit.collider == null) continue;
-            if (hit.collider.CompareTag("Player") && CompareTag("EnemyBullet"))
+            if (hit.collider.CompareTag("PlayerBody") && CompareTag("EnemyBullet"))
             {
                 if (hit.collider.name == "Head" || hit.collider.name == "Body")
                 {
@@ -49,7 +49,7 @@ public class Bullet : MonoBehaviour
                     }
                 }
             }
-            else if (hit.collider.CompareTag("Enemy") && CompareTag("Bullet"))
+            else if (hit.collider.CompareTag("EnemyBody") && CompareTag("Bullet"))
             {
                 if (hit.collider.name == "Head" || hit.collider.name == "Body")
                 {

@@ -54,7 +54,7 @@ public class Warehouse : MonoBehaviour
     public void SellItem(GameObject item)
     {
         int price = item.GetComponent<Item>().GetSellPrice();
-        Cash += price;
+        Cash += (int)(price * 0.9f);    // 10% fee for selling
         Destroy(item);
     }
 }

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -92,7 +91,7 @@ public class WeaponControl : MonoBehaviour
         direction = (Quaternion.Euler(0, 0, randomAngle) * direction).normalized;
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
         Bullet bulletScript = bullet.GetComponent<Bullet>();
-        bulletScript.Init(direction, 100, _curWeapon.ArmorDmg, _curWeapon.bodyDmg);
+        bulletScript.Init(direction, 100, _curWeapon.ArmorDmg, _curWeapon.bodyDmg, _curWeapon.range * 0.004f);
         _lastFireTime = Time.time;
         
         if (_curWeapon.mode == 1)
@@ -181,10 +180,8 @@ public class WeaponControl : MonoBehaviour
             return;
         }
         
-        // Decrease current ammo by 1
         _curWeapon.currentAmmo--;
         
-        // Update the UI
         weaponCurAmmo.text = _curWeapon.currentAmmo.ToString();
     }
 

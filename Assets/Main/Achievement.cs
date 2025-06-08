@@ -16,7 +16,7 @@ public class Achievement : MonoBehaviour
     public Sprite silver;
     public Sprite gold;
     public Sprite diamond;
-    private int _maxValue = 400000;
+    private int _maxValue = 4000000;
     
     void OnEnable()
     {

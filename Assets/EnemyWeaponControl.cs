@@ -78,7 +78,7 @@ public class EnemyWeaponControl : MonoBehaviour
         direction = (Quaternion.Euler(0, 0, randomAngle) * direction).normalized;
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
         Bullet bulletScript = bullet.GetComponent<Bullet>();
-        bulletScript.Init(direction, 100, _curWeapon.ArmorDmg, _curWeapon.bodyDmg);
+        bulletScript.Init(direction, 100, _curWeapon.ArmorDmg, _curWeapon.bodyDmg, 2f);
         _lastFireTime = Time.time;
         
         if (_curWeapon.mode == 1)

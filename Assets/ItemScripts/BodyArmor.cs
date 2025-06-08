@@ -31,4 +31,9 @@ public class BodyArmor : Item
             durability = maxDurability;
         }
     }
+    
+    public override int GetSellPrice()
+    {
+        return price * durability / maxDurability;
+    }
 }

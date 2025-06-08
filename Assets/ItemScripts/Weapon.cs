@@ -34,4 +34,22 @@ public class Weapon : Item
                "Mode: " + (mode == 0 ? "Single" : "Auto") + "\n" +
                "Ammo Type: " + ammoType + "\n";
     }
+
+    public override int GetSellPrice()
+    {
+        if (currentAmmo <= 0)
+            return price;
+        int ammoUnitPrice = 0;
+        GameObject[] ammoPrefab = Resources.LoadAll<GameObject>("Ammo");
+        foreach (GameObject ammo in ammoPrefab)
+        {
+            Ammo ammoScript = ammo.GetComponent<Ammo>();
+            if (ammoScript != null && ammoScript.itemName == ammoType)
+            {
+                ammoUnitPrice = ammoScript.price / ammoScript.maxStackSize;
+                break;
+            }
+        }
+        return price + ammoUnitPrice * currentAmmo;
+    }
 }

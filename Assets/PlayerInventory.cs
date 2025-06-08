@@ -519,7 +519,7 @@ public class PlayerInventory : MonoBehaviour
 
         if (remainingSize - innerSize - equipped.size < 0)
         {
-            MessagePopup.Show("Not enough space in inventory to drop: " + equipped.itemName);
+            MessagePopup.Show("Not enough space in inventory to unequip: " + equipped.itemName);
             return;
         }
 

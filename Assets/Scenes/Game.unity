@@ -4591,7 +4591,7 @@ GameObject:
   - component: {fileID: 342873296}
   m_Layer: 15
   m_Name: Body
-  m_TagString: Player
+  m_TagString: PlayerBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13933,8 +13933,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  endurance: 20
-  maxEndurance: 20
+  endurance: 30
+  maxEndurance: 30
   playerInventoryUI: {fileID: 1616941924}
   enduranceBar: {fileID: 1276387491}
 --- !u!95 &972506615
@@ -20779,7 +20779,7 @@ GameObject:
   - component: {fileID: 1467861361}
   m_Layer: 15
   m_Name: Head
-  m_TagString: Player
+  m_TagString: PlayerBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
