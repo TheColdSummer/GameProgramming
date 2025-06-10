@@ -20,6 +20,8 @@ public class Enemy : MonoBehaviour
     public GameObject question;
     public GameObject exclaimRed;
     public GameObject exclaimYellow;
+    public GameObject run;
+    public GameObject heal;
     private static GameObject _player;
     private float _visualRadius;
     private float _attackRadius;
@@ -233,8 +235,17 @@ public class Enemy : MonoBehaviour
             return;
 
         float dist = Vector2.Distance(transform.position, _player.transform.position);
-
-        if (dist > _visualRadius && _fsm.CurrentState() != StateType.Idle && _fsm.CurrentState() != StateType.Alert)
+        StateType s = _fsm.CurrentState();
+        if (Difficulty.GetDifficulty() > 2f)
+        {
+            if (currentHp < 50 && s != StateType.Escape && s != StateType.Die)
+            {
+                _fsm.TransitionToState(StateType.Escape);
+                return;
+            }
+        }
+        
+        if (dist > _visualRadius && s != StateType.Idle && s != StateType.Alert && s != StateType.Escape)
         {
             _fsm.TransitionToState(StateType.Idle);
         }
@@ -436,7 +447,8 @@ public class Enemy : MonoBehaviour
             }
             else if (hit.collider.CompareTag("Wall"))
             {
-                if (_fsm.CurrentState() != StateType.Alert && _fsm.CurrentState() != StateType.Idle)
+                StateType s = _fsm.CurrentState();
+                if (s != StateType.Alert && s != StateType.Idle && s != StateType.Escape)
                 {
                     _fsm.TransitionToState(StateType.Idle);
                 }
@@ -449,6 +461,8 @@ public class Enemy : MonoBehaviour
         question.SetActive(false);
         exclaimRed.SetActive(false);
         exclaimYellow.SetActive(false);
+        run.SetActive(false);
+        heal.SetActive(false);
     }
 
     public void Question()
@@ -456,6 +470,8 @@ public class Enemy : MonoBehaviour
         question.SetActive(true);
         exclaimRed.SetActive(false);
         exclaimYellow.SetActive(false);
+        run.SetActive(false);
+        heal.SetActive(false);
     }
 
     public void ExclaimRed()
@@ -463,6 +479,8 @@ public class Enemy : MonoBehaviour
         question.SetActive(false);
         exclaimRed.SetActive(true);
         exclaimYellow.SetActive(false);
+        run.SetActive(false);
+        heal.SetActive(false);
     }
 
     public void ExclaimYellow()
@@ -470,5 +488,25 @@ public class Enemy : MonoBehaviour
         question.SetActive(false);
         exclaimRed.SetActive(false);
         exclaimYellow.SetActive(true);
+        run.SetActive(false);
+        heal.SetActive(false);
+    }
+    
+    public void Escape()
+    {
+        question.SetActive(false);
+        exclaimRed.SetActive(false);
+        exclaimYellow.SetActive(false);
+        run.SetActive(true);
+        heal.SetActive(false);
+    }
+    
+    public void Heal()
+    {
+        question.SetActive(false);
+        exclaimRed.SetActive(false);
+        exclaimYellow.SetActive(false);
+        run.SetActive(false);
+        heal.SetActive(true);
     }
 }

@@ -30,7 +30,7 @@ public class ChaseState : IState
 
     public void OnEnter()
     {
-        _enemy.GetComponent<Enemy>().ExclaimYellow();
+        _enemyScript.ExclaimYellow();
         _enemy.GetComponent<CapsuleCollider2D>().isTrigger = true;
         _pathReady = false;
         _timer = 0f;
@@ -39,7 +39,7 @@ public class ChaseState : IState
 
     public void OnExit()
     {
-        _enemy.GetComponent<Enemy>().NoQuestion();
+        _enemyScript.NoQuestion();
         _enemy.GetComponent<CapsuleCollider2D>().isTrigger = false;
         if (_rb != null)
             _rb.velocity = Vector2.zero;

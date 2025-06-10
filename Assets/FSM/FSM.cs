@@ -9,6 +9,7 @@ public enum StateType
     Alert,
     Chase,
     Attack,
+    Escape,
     Die
 }
 
@@ -31,6 +32,7 @@ public class FSM : MonoBehaviour
         _states[StateType.Alert] = new AlertState(this);
         _states[StateType.Chase] = new ChaseState(this);
         _states[StateType.Attack] = new AttackState(this);
+        _states[StateType.Escape] = new EscapeState(this);
         _states[StateType.Die] = new DieState(this);
         
         TransitionToState(StateType.Idle);

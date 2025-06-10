@@ -456,7 +456,6 @@ public class SaveLoadManager: MonoBehaviour
         if (File.Exists(_savePath))
         {
             File.Delete(_savePath);
-            Debug.Log("Save data cleared at " + _savePath);
         }
         else
         {
@@ -480,7 +479,6 @@ public class SaveLoadManager: MonoBehaviour
     {
         string json = JsonConvert.SerializeObject(value, Formatting.Indented);
         File.WriteAllText(_savePath, json);
-        Debug.Log("Saved float value: " + value + " at " + _savePath);
     }
 }
 
