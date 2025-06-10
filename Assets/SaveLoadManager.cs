@@ -463,6 +463,25 @@ public class SaveLoadManager: MonoBehaviour
             Debug.Log("No save data found to clear at " + _savePath);
         }
     }
+
+    public float LoadFloat()
+    {
+        if (!File.Exists(_savePath))
+        {
+            Debug.Log("Save file not found at " + _savePath);
+            return 1f;
+        }
+        string json = File.ReadAllText(_savePath);
+        float value = JsonConvert.DeserializeObject<float>(json);
+        return value;
+    }
+
+    public void SaveFloat(float value)
+    {
+        string json = JsonConvert.SerializeObject(value, Formatting.Indented);
+        File.WriteAllText(_savePath, json);
+        Debug.Log("Saved float value: " + value + " at " + _savePath);
+    }
 }
 
 [System.Serializable]

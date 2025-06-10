@@ -12,7 +12,7 @@ public class ChaseState : IState
     private Animator _animator;
     private Pathfinding _pathfinding;
     private int _currentNodeIndex;
-    private float _moveSpeed = 18f;
+    private float _moveSpeed = 15f;
     private bool _pathReady = false;
     private float _timer = 0f;
     private float _updateInterval = 3f;
@@ -73,7 +73,7 @@ public class ChaseState : IState
 
         Vector2 targetPos = _pathToPlayer[_currentNodeIndex].worldPosition;
         Vector2 currentPos = _rb.position;
-        Vector2 newPos = Vector2.MoveTowards(currentPos, targetPos, _moveSpeed * Time.deltaTime);
+        Vector2 newPos = Vector2.MoveTowards(currentPos, targetPos, _moveSpeed * (1 + Difficulty.GetDifficulty() * 0.1f) * Time.deltaTime);
         _rb.MovePosition(newPos);
         Vector2 dir = targetPos - currentPos;
         if (_animator != null)

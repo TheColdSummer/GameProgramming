@@ -426,7 +426,7 @@ public class Enemy : MonoBehaviour
                     {
                         _fsm.TransitionToState(StateType.Attack);
                     }
-                    else if (dist > _attackRadius * 1.4f &&
+                    else if (dist > _attackRadius * (1f + Difficulty.GetDifficulty() * 0.1) &&
                              (currentState == StateType.Idle || currentState == StateType.Alert ||
                               currentState == StateType.Attack))
                     {

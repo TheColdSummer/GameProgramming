@@ -22,6 +22,7 @@ public class SaveManager : MonoBehaviour
     private string _weaponFilePath;
     private string _warehouseFilePath;
     private string _cashFilePath;
+    private string _difficultyFilePath;
     private SaveLoadManager _saveLoadManager;
 
     void OnEnable()
@@ -34,6 +35,7 @@ public class SaveManager : MonoBehaviour
         _weaponFilePath = Application.persistentDataPath + "/weapon.json";
         _warehouseFilePath = Application.persistentDataPath + "/warehouse.json";
         _cashFilePath = Application.persistentDataPath + "/cash.json";
+        _difficultyFilePath = Application.persistentDataPath + "/difficulty.json";
         _saveLoadManager = new SaveLoadManager();
     }
 
@@ -94,6 +96,7 @@ public class SaveManager : MonoBehaviour
         }
 
         SaveWarehouse();
+        IncreaseDifficulty();
     }
 
     public void SaveWarehouse()
@@ -187,6 +190,22 @@ public class SaveManager : MonoBehaviour
         }
 
         LoadWarehouse();
+        LoadDifficulty();
+    }
+
+    private void LoadDifficulty()
+    {
+        _saveLoadManager.SetPath(_difficultyFilePath);
+        float loadedDifficulty = _saveLoadManager.LoadFloat();
+        if (loadedDifficulty < 0f)
+        {
+            loadedDifficulty = 0f;
+        }
+        else if (loadedDifficulty > 5f)
+        {
+            loadedDifficulty = 5f;
+        }
+        Difficulty.SetDifficulty(loadedDifficulty);
     }
 
     public void LoadWarehouse()
@@ -233,5 +252,33 @@ public class SaveManager : MonoBehaviour
         _saveLoadManager.ClearSaveData();
         _saveLoadManager.SetPath(_weaponFilePath);
         _saveLoadManager.ClearSaveData();
+
+        DecreaseDifficulty();
+    }
+
+    private void DecreaseDifficulty()
+    {
+        _saveLoadManager.SetPath(_difficultyFilePath);
+        _saveLoadManager.ClearSaveData();
+        float currentDifficulty = Difficulty.GetDifficulty() - 0.1f;
+        if (currentDifficulty < 0f)
+        {
+            currentDifficulty = 0f;
+        }
+
+        _saveLoadManager.SaveFloat(currentDifficulty);
+    }
+
+    private void IncreaseDifficulty()
+    {
+        _saveLoadManager.SetPath(_difficultyFilePath);
+        _saveLoadManager.ClearSaveData();
+        float currentDifficulty = Difficulty.GetDifficulty();
+        if (currentDifficulty < 5f)
+        {
+            currentDifficulty += 0.1f;
+        }
+
+        _saveLoadManager.SaveFloat(currentDifficulty);
     }
 }

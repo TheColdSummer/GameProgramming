@@ -72,8 +72,9 @@ public class EnemyWeaponControl : MonoBehaviour
 
     public void Fire()
     {
+        float difficulty = Mathf.Lerp(15f, 4f, Mathf.Clamp01(Difficulty.GetDifficulty() / 5f));
         Vector2 direction = (directionPoint.position - firePoint.position).normalized;
-        float maxAngle = Mathf.Lerp(35f, 8f, Mathf.Clamp01(_curWeapon.control / 100f));
+        float maxAngle = Mathf.Lerp(30f + difficulty, 1f + difficulty, Mathf.Clamp01(_curWeapon.control / 100f));
         float randomAngle = Random.Range(-maxAngle, maxAngle);
         direction = (Quaternion.Euler(0, 0, randomAngle) * direction).normalized;
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
