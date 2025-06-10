@@ -79,7 +79,7 @@ public class WeaponControl : MonoBehaviour
         if (_curWeapon.currentAmmo <= 0)
         {
             // need reload
-            if (Input.GetMouseButtonDown(0) && audioSource != null && emptyMagClip != null)
+            if (SoundSetting.SoundEffectEnabled && Input.GetMouseButtonDown(0) && audioSource != null && emptyMagClip != null)
             {
                 audioSource.PlayOneShot(emptyMagClip);
             }
@@ -96,12 +96,12 @@ public class WeaponControl : MonoBehaviour
         
         if (_curWeapon.mode == 1)
         {
-            if (autoFireClip != null && audioSource != null)
+            if (SoundSetting.SoundEffectEnabled && autoFireClip != null && audioSource != null)
                 audioSource.PlayOneShot(autoFireClip);
         }
         else if (_curWeapon.mode == 0)
         {
-            if (singleFireClip != null && audioSource != null)
+            if (SoundSetting.SoundEffectEnabled && singleFireClip != null && audioSource != null)
                 audioSource.PlayOneShot(singleFireClip);
         }
 
@@ -122,7 +122,7 @@ public class WeaponControl : MonoBehaviour
     private IEnumerator PlayBoltActionAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        if (boltActionClip != null && audioSource != null)
+        if (SoundSetting.SoundEffectEnabled && boltActionClip != null && audioSource != null)
             audioSource.PlayOneShot(boltActionClip);
     }
 
@@ -215,7 +215,7 @@ public class WeaponControl : MonoBehaviour
 
     public void PlayReloadAudio()
     {
-        if (audioSource != null && reloadClip != null)
+        if (SoundSetting.SoundEffectEnabled && audioSource != null && reloadClip != null)
         {
             audioSource.PlayOneShot(reloadClip);
         }

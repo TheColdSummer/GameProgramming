@@ -84,12 +84,12 @@ public class EnemyWeaponControl : MonoBehaviour
         
         if (_curWeapon.mode == 1)
         {
-            if (autoFireClip != null && audioSource != null)
+            if (SoundSetting.SoundEffectEnabled && autoFireClip != null && audioSource != null)
                 audioSource.PlayOneShot(autoFireClip);
         }
         else if (_curWeapon.mode == 0)
         {
-            if (singleFireClip != null && audioSource != null)
+            if (SoundSetting.SoundEffectEnabled && singleFireClip != null && audioSource != null)
                 audioSource.PlayOneShot(singleFireClip);
         }
 
@@ -108,7 +108,7 @@ public class EnemyWeaponControl : MonoBehaviour
     private IEnumerator PlayBoltActionAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        if (boltActionClip != null && audioSource != null)
+        if (SoundSetting.SoundEffectEnabled && boltActionClip != null && audioSource != null)
             audioSource.PlayOneShot(boltActionClip);
     }
     

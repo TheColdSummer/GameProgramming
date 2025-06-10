@@ -9,13 +9,16 @@ public class BGM : MonoBehaviour
     
     void Start()
     {
-        if (audioSource == null)
+        if (SoundSetting.BGMEnabled)
         {
-            audioSource = gameObject.AddComponent<AudioSource>();
-        }
+            if (audioSource == null)
+            {
+                audioSource = gameObject.AddComponent<AudioSource>();
+            }
         
-        audioSource.clip = audioClip;
-        audioSource.loop = _loop;
-        audioSource.Play();
+            audioSource.clip = audioClip;
+            audioSource.loop = _loop;
+            audioSource.Play();
+        }
     }
 }

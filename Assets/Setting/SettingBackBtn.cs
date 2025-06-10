@@ -1,10 +1,9 @@
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class BackBtn : MonoBehaviour
+public class SettingBackBtn : MonoBehaviour
 {
-    public SaveManager saveManager;
     void Start()
     {
         GetComponent<UnityEngine.UI.Button>().onClick.AddListener(OpenMainUI);
@@ -14,7 +13,6 @@ public class BackBtn : MonoBehaviour
     {
         try
         {
-            saveManager.Save();
             SceneManager.LoadScene("Scenes/Main");
         }
         catch (Exception e)
