@@ -47,21 +47,6 @@ public class AlertState : IState
             Debug.LogError("Player GameObject not found.");
         }
     }
-    //
-    // private IEnumerator FindPathCoroutine()
-    // {
-    //     _pathfinding.FindPathAsync(
-    //         _enemy.transform.position,
-    //         _player.transform.position,
-    //         (path) =>
-    //         {
-    //             _pathToPlayer = path;
-    //             _currentNodeIndex = 0;
-    //             _pathReady = true;
-    //         }
-    //     );
-    //     yield return null;
-    // }
 
     public void OnExit()
     {
