@@ -153,42 +153,6 @@ public class IdleState : IState
         }
     }
 
-    // private void MoveToIdleRangeCenter()
-    // {
-    //     GameObject idleRangeObj = _enemyScript.GetIdleRange();
-    //     if (idleRangeObj == null) return;
-    //     Vector2 center = idleRangeObj.transform.position;
-    //     Vector2 dir = (center - (Vector2)_enemy.transform.position).normalized;
-    //     if (dir.x < 0)
-    //     {
-    //         _animator.SetBool("left_move", true);
-    //         _animator.SetBool("right_move", false);
-    //     }
-    //     else if (dir.x > 0)
-    //     {
-    //         _animator.SetBool("left_move", false);
-    //         _animator.SetBool("right_move", true);
-    //     }
-    //     else
-    //     {
-    //         _animator.SetBool("left_move", false);
-    //         _animator.SetBool("right_move", false);
-    //     }
-    //     _rb.velocity = dir * _moveSpeed;
-    //
-    //     CircleCollider2D range = idleRangeObj.GetComponent<CircleCollider2D>();
-    //     if (range != null)
-    //     {
-    //         float radius = range.radius * range.transform.lossyScale.x;
-    //         float dist = Vector2.Distance(_enemy.transform.position, center);
-    //         if (dist <= radius * 0.98f)
-    //         {
-    //             _rb.velocity = Vector2.zero;
-    //             ChooseRandomAction();
-    //         }
-    //     }
-    // }
-    
     private void StartPathToCenter(Vector2 center)
     {
         _pathReady = false;

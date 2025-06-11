@@ -1,8 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * This bullet class handles the behavior of bullets in the game.
+ */
 public class Bullet : MonoBehaviour
 {
     private Vector2 _direction;
@@ -32,6 +32,7 @@ public class Bullet : MonoBehaviour
     {
         Vector2 currentPosition = transform.position;
 
+        // the following code checks for collisions with characters and enemies and applies hit compensation if necessary
         RaycastHit2D[] hits = Physics2D.LinecastAll(_lastPosition, currentPosition, LayerMask.GetMask("Character", "Enemy"));
         foreach (var hit in hits)
         {

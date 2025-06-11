@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * This script creates a grid map for pathfinding purposes.
+ */
 public class GridMap : MonoBehaviour
 {
     public Vector2 gridWorldSize;
@@ -19,6 +22,9 @@ public class GridMap : MonoBehaviour
         CreateGrid();
     }
 
+    /*
+     * This method creates the grid based on the specified world size and node radius.
+     */
     void CreateGrid()
     {
         _grid = new Node[_gridSizeX, _gridSizeY];
@@ -34,6 +40,9 @@ public class GridMap : MonoBehaviour
         }
     }
 
+    /*
+     * This method returns the node at the specified world position.
+     */
     public Node NodeFromWorldPoint(Vector2 worldPosition)
     {
         float percentX = Mathf.Clamp01((worldPosition.x + gridWorldSize.x / 2) / gridWorldSize.x);
@@ -43,6 +52,9 @@ public class GridMap : MonoBehaviour
         return _grid[x, y];
     }
 
+    /*
+     * This method returns a list of neighbouring nodes for the specified node.
+     */
     public List<Node> GetNeighbours(Node node)
     {
         List<Node> neighbours = new List<Node>();

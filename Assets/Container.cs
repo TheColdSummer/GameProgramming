@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,11 +13,6 @@ public class Container : MonoBehaviour
     private void InitItems()
     {
         ItemFactory.GenerateItemsForContainer(this);
-    }
-
-    void Update()
-    {
-        
     }
 
     public void Open(GameObject containerContent)

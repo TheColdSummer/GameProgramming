@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * This script is responsible for managing the player's status, including health, repletion, hydration...
+ */
 public class Player : MonoBehaviour
 {
     public int maxHp;

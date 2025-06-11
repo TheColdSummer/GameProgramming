@@ -1,10 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
 using System.IO;
-using UnityEditor;
 
+/*
+ * This class is responsible for saving and loading items and their data.
+ */
 public class SaveLoadManager: MonoBehaviour
 {
     private string _savePath;

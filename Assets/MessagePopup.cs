@@ -2,6 +2,9 @@
 using UnityEngine.UI;
 using System.Collections;
 
+/*
+ * This script manages the display of a message popup in the game.
+ */
 public class MessagePopup : MonoBehaviour
 {
     private static MessagePopup _instance;

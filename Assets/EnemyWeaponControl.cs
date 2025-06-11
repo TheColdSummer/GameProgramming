@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * This script controls the enemy's weapon behavior, including aiming, firing, and changing weapons.
+ * Similar to WeaponControl.cs
+ */
 public class EnemyWeaponControl : MonoBehaviour
 {
     public GameObject bulletPrefab;
@@ -21,7 +25,6 @@ public class EnemyWeaponControl : MonoBehaviour
         _fire = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (_curWeapon != null)

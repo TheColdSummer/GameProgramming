@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * This script is responsible for detecting hits from bullets and applying damage to the player or enemy.
+ */
 public class HitDetector : MonoBehaviour
 {
     void OnTriggerEnter2D(Collider2D other)
@@ -36,6 +37,9 @@ public class HitDetector : MonoBehaviour
         }
     }
 
+    /*
+     * This method is used to apply hit compensation for bullets that hit the player or enemy.
+     */
     public void HitCompensation(Bullet bullet, string colliderName, string target)
     {
         if (colliderName == "Head")

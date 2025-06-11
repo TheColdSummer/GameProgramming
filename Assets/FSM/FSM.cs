@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,6 +11,9 @@ public enum StateType
     Die
 }
 
+/*
+ * This is the Finite State Machine class that manages the states of the enemy.
+ */
 public class FSM : MonoBehaviour
 {
     private IState _currentState;
@@ -40,6 +41,7 @@ public class FSM : MonoBehaviour
 
     void Update()
     {
+        // call the OnUpdate method of the current state each frame
         _currentState.OnUpdate();
     }
 
@@ -55,6 +57,9 @@ public class FSM : MonoBehaviour
         return StateType.Idle;
     }
     
+    /*
+     * The TransitionToState method is used to change the current state of the FSM.
+     */
     public void TransitionToState(StateType state)
     {
         if (_currentState != null)

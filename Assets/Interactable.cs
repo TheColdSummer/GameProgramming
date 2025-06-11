@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * This script manages the interaction with containers in the game.
+ */
 public class Interactable : MonoBehaviour
 {
     public Container container;

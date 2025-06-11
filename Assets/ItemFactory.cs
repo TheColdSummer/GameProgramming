@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * This script follows the Factory Design Pattern to create items from prefabs.
+ */
 public static class ItemFactory
 {
     private static Dictionary<string, float> _itemCategoryWeights = new Dictionary<string, float>

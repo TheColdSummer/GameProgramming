@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * This script defines the Enemy class, which represents an enemy character in the game.
+ */
 public class Enemy : MonoBehaviour
 {
     public int maxHp;
@@ -28,7 +31,6 @@ public class Enemy : MonoBehaviour
     private GameObject _idleRange;
     private FSM _fsm;
 
-    // Start is called before the first frame update
     void Start()
     {
         InitEnemy();
@@ -399,6 +401,9 @@ public class Enemy : MonoBehaviour
         return _idleRange;
     }
 
+    /*
+     * This method is used to check if the player is within the enemy's visual range.
+     */
     void OnTriggerStay2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
@@ -456,6 +461,9 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    /*
+     * The following methods control the visibility of various UI elements
+     */
     public void NoQuestion()
     {
         question.SetActive(false);

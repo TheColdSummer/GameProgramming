@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * This is the base class for all items in the game.
+ */
 public abstract class Item : MonoBehaviour
 {
     public string itemName;

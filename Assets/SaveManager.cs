@@ -1,9 +1,9 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
+/*
+ * This script manages the saving and loading of player equipment and inventory items.
+ */
 public class SaveManager : MonoBehaviour
 {
     public GameObject backpack;

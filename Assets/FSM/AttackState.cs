@@ -1,15 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class AttackState : IState
 {
     private FSM _fsm;
     private GameObject _enemy;
     private GameObject _player;
-    private Rigidbody2D _rb;
-    private Animator _animator;
-    private Pathfinding _pathfinding;
     private Enemy _enemyScript;
     private float _fireCooldown;
     private float _fireDuration;
@@ -21,9 +16,6 @@ public class AttackState : IState
         _fsm = fsm;
         _enemy = fsm.gameObject;
         _player = fsm.GetPlayer();
-        _rb = _enemy.GetComponent<Rigidbody2D>();
-        _pathfinding = fsm.GetPathFinding();
-        _animator = _enemy.GetComponent<Animator>();
         _enemyScript = _enemy.GetComponent<Enemy>();
         ResetFireCooldown();
     }

@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-
+﻿/*
+ * This class manages the game's difficulty level.
+ */
 public static class Difficulty
 {
     private static float _difficulty;

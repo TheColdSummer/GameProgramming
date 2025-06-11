@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/*
+ * This class represents a node in a grid for pathfinding algorithms.
+ */
 public class Node
 {
     public Vector2 worldPosition;

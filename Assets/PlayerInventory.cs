@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+/*
+ * This script manages the player's inventory, allowing items to be added, removed, and equipped.
+ */
 public class PlayerInventory : MonoBehaviour
 {
     public GameObject helmet;

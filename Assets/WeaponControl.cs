@@ -3,7 +3,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-
+/*
+ * This script controls the weapon system in a game, allowing players to fire weapons, reload, and manage weapon display.
+ */
 public class WeaponControl : MonoBehaviour
 {
     public Camera characterCamera;
@@ -26,6 +28,44 @@ public class WeaponControl : MonoBehaviour
     private bool _reloading;
 
     void Update()
+    {
+        AdjustAimDirection();
+        LeftClickToFire();
+    }
+
+    /*
+     * This method handles the left mouse button click to fire the weapon.
+     */
+    private void LeftClickToFire()
+    {
+        if (playerInventoryUI == null)
+        {
+            return;
+        }
+
+        if (!playerInventoryUI.activeSelf && _curWeapon != null && !_reloading)
+        {
+            if (_curWeapon.mode == 0)
+            {
+                if (Input.GetMouseButtonDown(0) && Time.time - _lastFireTime >= (float)60 / _curWeapon.RPM)
+                {
+                    Fire();
+                }
+            }
+            else if (_curWeapon.mode == 1)
+            {
+                if (Input.GetMouseButton(0) && Time.time - _lastFireTime >= (float)60 / _curWeapon.RPM)
+                {
+                    Fire();
+                }
+            }
+        }
+    }
+
+    /*
+     * This method adjusts the aim direction based on the mouse position.
+     */
+    private void AdjustAimDirection()
     {
         Vector2 mousePosition = Input.mousePosition;
         Vector3 mouseScreenPosition = new Vector3(mousePosition.x, mousePosition.y, Camera.main.nearClipPlane);
@@ -50,29 +90,11 @@ public class WeaponControl : MonoBehaviour
             transform.localScale = scale;
             transform.rotation = Quaternion.Euler(0, 0, angle);
         }
-        if (playerInventoryUI == null)
-        {
-            return;
-        }
-        if (!playerInventoryUI.activeSelf && _curWeapon != null && !_reloading)
-        {
-            if (_curWeapon.mode == 0)
-            {
-                if (Input.GetMouseButtonDown(0) && Time.time - _lastFireTime >= (float)60 / _curWeapon.RPM)
-                {
-                    Fire();
-                }
-            }
-            else if (_curWeapon.mode == 1)
-            {
-                if (Input.GetMouseButton(0) && Time.time - _lastFireTime >= (float)60 / _curWeapon.RPM)
-                {
-                    Fire();
-                }
-            }
-        }
     }
-    
+
+    /*
+     * This method fires the weapon, creating a bullet and playing the appropriate sound effects.
+     */
     void Fire()
     {
         // check if the weapon has ammo in the magazine
@@ -119,6 +141,9 @@ public class WeaponControl : MonoBehaviour
         WeaponFired();
     }
     
+    /*
+     * This coroutine plays the bolt action sound after a specified delay.
+     */
     private IEnumerator PlayBoltActionAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -126,6 +151,10 @@ public class WeaponControl : MonoBehaviour
             audioSource.PlayOneShot(boltActionClip);
     }
 
+    /*
+     * This method changes the current weapon to the specified weapon.
+     * If the weapon is null, it clears the current weapon and updates the display accordingly.
+     */
     public void ChangeWeapon(Weapon weapon)
     {
         if (weapon == null)
@@ -158,6 +187,10 @@ public class WeaponControl : MonoBehaviour
         }
     }
 
+    /*
+     * This method updates the weapon display with the current weapon's information.
+     * If the weapon is null, it sets the display to show zero ammo.
+     */
     public void UpdateWeaponDisplay(Weapon weapon)
     {
         if (weapon == null)
@@ -172,6 +205,9 @@ public class WeaponControl : MonoBehaviour
         weaponMaxAmmo.text = weapon.capacity.ToString();
     }
 
+    /*
+     * This method returns the current weapon.
+     */
     public void WeaponFired()
     {
         if (_curWeapon == null)
@@ -185,6 +221,9 @@ public class WeaponControl : MonoBehaviour
         weaponCurAmmo.text = _curWeapon.currentAmmo.ToString();
     }
 
+    /*
+     * This method reloads the current weapon with the specified amount of ammo.
+     */
     public void ReLoad(int ammo)
     {
         if (_curWeapon == null)

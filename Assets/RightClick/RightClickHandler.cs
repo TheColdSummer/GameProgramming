@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
 
+/*
+ * This script handles right-click interactions in the game.
+ */
 public class RightClickHandler : MonoBehaviour, IPointerClickHandler
 {
     public static GameObject RightClickMenuPanel;
@@ -74,6 +74,9 @@ public class RightClickHandler : MonoBehaviour, IPointerClickHandler
     }
 }
 
+/*
+ * This class provides a utility method to clamp the position of a UI element
+ */
 public static class UIPositionHelper
 {
     public static Vector2 GetClampedPosition(RectTransform menuRect, Vector2 desiredPosition)

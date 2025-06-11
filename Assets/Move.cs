@@ -1,8 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * This script handles player movement, endurance management, and animation.
+ */
 public class Move : MonoBehaviour
 {
     public float speed;
