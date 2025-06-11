@@ -24,7 +24,7 @@ public class Extract : MonoBehaviour
                 successObj.SetActive(true);
                 failObj.SetActive(false);
             }
-            saveManager.Save();
+            saveManager.GameSuccess();
         }
         else
         {

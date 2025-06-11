@@ -96,7 +96,6 @@ public class SaveManager : MonoBehaviour
         }
 
         SaveWarehouse();
-        IncreaseDifficulty();
     }
 
     public void SaveWarehouse()
@@ -254,6 +253,12 @@ public class SaveManager : MonoBehaviour
         _saveLoadManager.ClearSaveData();
 
         DecreaseDifficulty();
+    }
+    
+    public void GameSuccess()
+    {
+        Save();
+        IncreaseDifficulty();
     }
 
     private void DecreaseDifficulty()
