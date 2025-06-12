@@ -21,9 +21,17 @@ You should:
 7. Add scenes from `Assets/Scenes/` 
 
 **Arrange the scenes like this**
-
-![img.png](./img/img.png)
+```
+Main
+Game (not loaded)
+PrivatePolicy (not loaded)
+Rule (not loaded)
+Setting(notloaded)
+Shop (not loaded)
+Warehouse (not loaded)
+```
 
 **IMPORTANT**
+
 The game may work a little bit different in your Unity Editor and the executable file. Because many automatically generated project files by Unity Editor are not uploaded to GitHub.
 If you follow the instructions above, you should be able to run the game in Unity Editor without meeting severe errors.
