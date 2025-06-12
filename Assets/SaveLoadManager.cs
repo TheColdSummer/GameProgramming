@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -33,12 +34,20 @@ public class SaveLoadManager: MonoBehaviour
             return null;
         }
 
-        string json = File.ReadAllText(_savePath);
-        ItemData itemData = JsonConvert.DeserializeObject<ItemData>(json, new JsonSerializerSettings
+        try
         {
-            TypeNameHandling = TypeNameHandling.All
-        });
-        return itemData;
+            string json = File.ReadAllText(_savePath);
+            ItemData itemData = JsonConvert.DeserializeObject<ItemData>(json, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All
+            });
+            return itemData;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Fail to load "+ _savePath + ": " + e.Message);
+            return null;
+        }
     }
     
     public void SaveItems(List<Item> items)
@@ -64,12 +73,20 @@ public class SaveLoadManager: MonoBehaviour
             return null;
         }
 
-        string json = File.ReadAllText(_savePath);
-        List<ItemData> itemDataList = JsonConvert.DeserializeObject<List<ItemData>>(json, new JsonSerializerSettings
+        try
         {
-            TypeNameHandling = TypeNameHandling.All
-        });
-        return itemDataList;
+            string json = File.ReadAllText(_savePath);
+            List<ItemData> itemDataList = JsonConvert.DeserializeObject<List<ItemData>>(json, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All
+            });
+            return itemDataList;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Fail to load " + _savePath + ": " + e.Message);
+            return null;
+        }
     }
     
     
@@ -86,9 +103,18 @@ public class SaveLoadManager: MonoBehaviour
             Debug.Log("Save file not found at " + _savePath);
             return 0; // Default value if file doesn't exist
         }
-        string json = File.ReadAllText(_savePath);
-        int cash = JsonConvert.DeserializeObject<int>(json);
-        return cash;
+
+        try
+        {
+            string json = File.ReadAllText(_savePath);
+            int cash = JsonConvert.DeserializeObject<int>(json);
+            return cash;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Fail to load " + _savePath + ": " + e.Message);
+            return 0;
+        }
     }
     
     public GameObject ConstructGameObjectFromItemData(ItemData itemData)
@@ -471,9 +497,18 @@ public class SaveLoadManager: MonoBehaviour
             Debug.Log("Save file not found at " + _savePath);
             return 1f;
         }
-        string json = File.ReadAllText(_savePath);
-        float value = JsonConvert.DeserializeObject<float>(json);
-        return value;
+
+        try
+        {
+            string json = File.ReadAllText(_savePath);
+            float value = JsonConvert.DeserializeObject<float>(json);
+            return value;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Fail to load " + _savePath + ": " + e.Message);
+            return 1f;
+        }
     }
 
     public void SaveFloat(float value)
